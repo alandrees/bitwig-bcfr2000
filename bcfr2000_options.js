@@ -7,10 +7,9 @@
  *  bcfr2000_controller_object.js
  */
 
-var BCFR2000 = BCFR2000 || {}:
-
-if(typeof BCFR2000.BCR === 'undefined') BCFR2000.BCR = {};
-if(typeof BCFR2000.BCF === 'undefined') BCFR2000.BCF = {};
+var BCFR2000 = BCFR2000 || {};
+var BCR = BCR || {};
+var BCF = BCF || {};
 
 /**\fn BCFR2000.options
  *
@@ -25,20 +24,20 @@ BCFR2000.options = {'bcfs'          : 1,
 		    'bcrs'          : 1,
 		    'io'            : 'bcr',
 		    'discoveryname' : [["BCF2000", "BCF2000"]]
-		   }
+		   };
 
-/**\fn BCFR2000.BCF2000.options
+/**\fn BCF.options
  *
  * Options used for the BCF2000 portion of the controller
  *
  */
 
-BCFR2000.BCF2000.options = {'channel' : 1};
+BCF.options = {'channel' : 1};
 
-/**\fn BCFR.BCR2000.options
+/**\fn BCR.options
  *
  * Options used for the BCR2000 portion of the controller
  *
  */
 
-BCFR2000.BCR2000.options = {'channel' : 2};
+BCR.options = {'channel' : 2};
