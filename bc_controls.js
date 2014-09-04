@@ -49,7 +49,7 @@ BCFR2000.Button = function()
  * @returns None
  */
 
-BCFR2000.Fader = function
+BCFR2000.Fader = function()
 {
 
 }
