@@ -35,6 +35,7 @@ BCFR2000.BCFRController = function(options, instance)
     this.bcr = new Array();
     this.bcf = new Array();
 
+    this.banks = {};
     for(var i = 0; i < BCFR2000.options.bcrs; i++)
     {
 	this.bcr.push(new BCR.BCR2000Controller(BCR.options, i, BCR.build_control_layout, BCFR2000.BCR_CHANNEL));
@@ -61,7 +62,9 @@ BCFR2000.BCFRController.prototype.init = function()
 
     host.getMidiInPort(this.instance).setMidiCallback(function(status, data1, data2){self.onMidi(status, data1, data2);});
 
-    this.trackbank = host.createMainTrackBank(8, 3, 0);
+    this.banks.trackbank = host.createMainTrackBank(this.options.tracks, this.options.sends, this.options.scenes);
+    this.banks.cursortrack = host.createCursorTrack(this.options.sends, this.options.scenes);
+    this.banks.cursordevice = host.createCursorDevice();
 
     var io = true;
 
@@ -70,12 +73,12 @@ BCFR2000.BCFRController.prototype.init = function()
     {
 	if((this.options.io === 'bcr') && io)
 	{
-	    this.bcr[i].init(true);
+	    this.bcr[i].init(true, this.banks);
 	    io = false;
 	}
 	else
 	{
-	    this.bcr[i].init(false);
+	    this.bcr[i].init(false, this.banks);
 	}
     }
 
@@ -84,12 +87,12 @@ BCFR2000.BCFRController.prototype.init = function()
     {
 	if((this.options.io === 'bcf') && io)
 	{
-	    this.bcf[i].init(true);
+	    this.bcf[i].init(true, this.banks);
 	    io = false;
 	}
 	else
 	{
-	    this.bcf[i].init(false);
+	    this.bcf[i].init(false, this.banks);
 	}
     }
 }
@@ -159,7 +162,7 @@ BCFR2000.BCFRController.prototype.onMidi = function(status, data1, data2)
     {
 	if(this.bcf[bcf_device].channel === MIDIChannel(status))
 	{
-	    this.bcf[bcf_device].onMidi(status, data1, data2, this.trackbank);
+	    this.bcf[bcf_device].onMidi(status, data1, data2);
 	    return;
 	}
     }
@@ -168,7 +171,7 @@ BCFR2000.BCFRController.prototype.onMidi = function(status, data1, data2)
     {
 	if(this.bcr[bcr_device].channel === MIDIChannel(status))
 	{
-	    this.bcf[bcf_device].onMidi(status, data1, data2, this.trackbank);
+	    this.bcf[bcf_device].onMidi(status, data1, data2, this.banks);
 	    return;
 	}
     }
