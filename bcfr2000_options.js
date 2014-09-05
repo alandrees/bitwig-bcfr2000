@@ -23,7 +23,10 @@ var BCF = BCF || {};
 BCFR2000.options = {'bcfs'          : 1, 
 		    'bcrs'          : 1,
 		    'io'            : 'bcr',
-		    'discoveryname' : [["BCF2000", "BCF2000"]]
+		    'discoveryname' : [["BCF2000", "BCF2000"]],
+		    'tracks'        : 8,
+		    'sends'         : 3,
+		    'scenes'        : 0
 		   };
 
 /**\fn BCF.options
@@ -38,7 +41,10 @@ BCF.options = {'channel'  : 1,
 	       'buttons'  : 16,
 	       'gencoder' : 32,
 	       'gbuttons' : 8,
-	       'misc'     : 4};
+	       'misc'     : 4,
+	       'tracks'   : BCFR2000.options.tracks || 8,
+	       'sends'    : BCFR2000.options.sends  || 3,
+	       'scenes'   : BCFR2000.options.scenes || 0};
 
 /**\fn BCR.options
  *
@@ -52,5 +58,8 @@ BCR.options = {'channel' : 2,
 	       'buttons'  : 16,
 	       'gencoder' : 32,
 	       'gbuttons' : 32,
-	       'misc'     : 4};
+	       'misc'     : 4,
+	       'tracks'   : BCFR2000.options.tracks || 8,
+	       'sends'    : BCFR2000.options.sends  || 3,
+	       'scenes'   : BCFR2000.options.scenes || 0};
 
