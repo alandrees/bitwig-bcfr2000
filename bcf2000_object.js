@@ -116,17 +116,20 @@ BCF.BCF2000Controller.prototype.flush = function()
 
 BCF.BCF2000Controller.prototype.onMidi = function(status, data1, data2)
 {
-    if(typeof this.controls[data1].callback !== 'undefined')
+    if(typeof this.controls[data1] !== 'undefined')
     {
-	var callback = this.controls[data1].callback
+	if(typeof this.controls[data1].callback !== 'undefined')
+	{
+	    var callback = this.controls[data1].callback
 
-	var msg = {'status' : status,
-		   'data1'  : data1,
-		   'data2'  : data2};
+	    var msg = {'status' : status,
+		       'data1'  : data1,
+		       'data2'  : data2};
 
-	callback.cb.call(callback.obj, 
-			 msg, 
-			 this.controls[data1]);
+	    callback.cb.call(callback.obj, 
+			     msg, 
+			     this.controls[data1]);
+	}
     }
 }
 
@@ -249,13 +252,6 @@ BCF.bind_observers = function()
     this.output_callbacks.mutefunc = function(value, index)
     {
 
-    }
-
-    var generateObserverFunc = function(cb, index){
-	return function(value)
-	{
-	    cb(value, index);
-	}
     }
 
     for(var index = 0; index < this.indexed_controls.length; index++)
