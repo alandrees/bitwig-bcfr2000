@@ -38,7 +38,7 @@ var icc_network = new Array();
 
 icc_network.push(ICC.create_new_icc_network('bcfr2000'));
 
-controllers[1] = new BCFR2000.BCFRController(BCFR2000.options, 0);
+controllers[0] = new BCFR2000.BCFRController(BCFR2000.options, 0);
 
 function init()
 {
