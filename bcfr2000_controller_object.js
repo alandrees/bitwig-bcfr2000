@@ -14,6 +14,9 @@
 var BCFR2000 = BCFR2000 || {};
 if(typeof BCFR2000.BCFRController === 'undefined') BCFR2000.BCFRController = {};
 
+BCFR2000.BCF_CHANNEL = 1;
+BCFR2000.BCR_CHANNEL = 0;
+
 
 /**\fn BCFR2000.BCFR2000Controller
  *
@@ -34,12 +37,12 @@ BCFR2000.BCFRController = function(options, instance)
 
     for(var i = 0; i < BCFR2000.options.bcrs; i++)
     {
-	this.bcr.push(new BCR.BCR2000Controller(options, i));
+	this.bcr.push(new BCR.BCR2000Controller(BCR.options, i, BCF.build_control_layout, BCFR2000.BCR_CHANNEL));
     }
 
     for(var i = 0; i < BCFR2000.options.bcfs; i++)
     {
-	this.bcf.push(new BCF.BCF2000Controller(options, i));		      
+	this.bcf.push(new BCF.BCF2000Controller(BCF.options, i, BCR.build_control_layout, BCFR2000.BCF_CHANNEL));		      
     }
 }
 
@@ -54,7 +57,38 @@ BCFR2000.BCFRController = function(options, instance)
 
 BCFR2000.BCFRController.prototype.init = function()
 {
+    var self = this;
 
+    host.getMidiInPort(this.instance).setMidiCallback(function(status, data1, data2){self.onMidi(status, data1, data2);});
+
+    var io = true;
+
+    //initialize the bcr's
+    for(var i in this.bcr)
+    {
+	if((this.options.io === 'bcr') && io)
+	{
+	    this.bcr[i].init(true);
+	    io = false;
+	}
+	else
+	{
+	    this.bcr[i].init(false);
+	}
+    }
+
+    //initalize the bcf's
+    for(var i in this.bcf)
+    {
+	if((this.options.io === 'bcf') && io)
+	{
+	    this.bcf[i].init(true);
+	}
+	else
+	{
+	    this.bcf[i].init(false);
+	}
+    }
 }
 
 
@@ -69,7 +103,15 @@ BCFR2000.BCFRController.prototype.init = function()
 
 BCFR2000.BCFRController.prototype.exit = function()
 {
+    for(var i in this.bcr)
+    {
+	this.bcr[i].exit();
+    }
 
+    for(var i in this.bcf)
+    {
+	this.bcf[i].exit();
+    }
 }
 
 /**\fn BCFR2000.BCFR2000Controller.prototype.flush
@@ -83,7 +125,17 @@ BCFR2000.BCFRController.prototype.exit = function()
 
 BCFR2000.BCFRController.prototype.flush = function()
 {
+    //initialize the bcr's
+    for(var i in this.bcr)
+    {
+	this.bcr[i].flush();
+    }
 
+    //initalize the bcf's
+    for(var i in this.bcf)
+    {
+	this.bcf[i].flush();
+    }
 }
 
 /**\fn BCFR2000.BCFRController.prototype.onMidi
@@ -100,7 +152,23 @@ BCFR2000.BCFRController.prototype.flush = function()
 
 BCFR2000.BCFRController.prototype.onMidi = function(status, data1, data2)
 {
+    for(var bcf_device in this.bcf)
+    {
+	if(this.bcf[bcf_device].channel === MIDIChannel(status))
+	{
+	    this.bcf[bcf_device].onMidi(status, data1, data2);
+	    return;
+	}
+    }
 
+    for(var bcr_device in this.bcr)
+    {
+	if(this.bcr[bcr_device].channel === MIDIChannel(status))
+	{
+	    this.bcf[bcf_device].onMidi(status, data1, data2);
+	    return;
+	}
+    }
 }
 
 
