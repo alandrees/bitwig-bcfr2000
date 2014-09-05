@@ -32,7 +32,13 @@ BCFR2000.options = {'bcfs'          : 1,
  *
  */
 
-BCF.options = {'channel' : 1};
+BCF.options = {'channel'  : 1,
+	       'faders'   : 8,
+	       'encoders' : 0,
+	       'buttons'  : 16,
+	       'gencoder' : 32,
+	       'gbuttons' : 8,
+	       'misc'     : 4};
 
 /**\fn BCR.options
  *
@@ -40,4 +46,11 @@ BCF.options = {'channel' : 1};
  *
  */
 
-BCR.options = {'channel' : 2};
+BCR.options = {'channel' : 2,
+	       'faders'   : 0,
+	       'encoders' : 24,
+	       'buttons'  : 16,
+	       'gencoder' : 32,
+	       'gbuttons' : 32,
+	       'misc'     : 4};
+
