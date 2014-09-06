@@ -62,9 +62,11 @@ BCFR2000.BCFRController.prototype.init = function()
 
     host.getMidiInPort(this.instance).setMidiCallback(function(status, data1, data2){self.onMidi(status, data1, data2);});
 
-    this.banks.trackbank = host.createMainTrackBank(this.options.tracks, this.options.sends, this.options.scenes);
-    this.banks.cursortrack = host.createCursorTrack(this.options.sends, this.options.scenes);
+    this.banks.trackbank    = host.createMainTrackBank(this.options.tracks, this.options.sends, this.options.scenes);
+    this.banks.cursortrack  = host.createCursorTrack(this.options.sends, this.options.scenes);
     this.banks.cursordevice = host.createCursorDevice();
+    this.banks.transport    = host.createTransport();
+    this.banks.master_track = host.createMasterTrack;
 
     var io = true;
 
@@ -147,7 +149,6 @@ BCFR2000.BCFRController.prototype.flush = function()
 /**\fn BCFR2000.BCFRController.prototype.onMidi
  *
  * Function to be fired on midi input from the controller
- * **THIS IS ONLY A PLACEHOLDER FUNCTION.  IT DOES NOTHING**
  *
  * @param status
  * @param data1
