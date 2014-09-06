@@ -43,7 +43,7 @@ BCF.BCF2000Controller = function(options, instance, control_builder, channel)
 
 /**\fn BCF.BCF2000Controller.prototype.init
  *
- * Init function to be called to initalize the 
+ * Init function to be called to initalize the controller
  *
  * @param io_controller sets if that controller is the one which has it's io bound to bitwig
  * @param banks passed from the encapsulating object (when running in standalone mode, this will be in the global scope)
@@ -54,8 +54,6 @@ BCF.BCF2000Controller = function(options, instance, control_builder, channel)
 
 BCF.BCF2000Controller.prototype.init = function(io_controller, banks)
 {
-    var self = this;
-
     if(typeof track_offset === 'undefined'){ var track_offset = 0; }
 
     this.track_offset = track_offset;
