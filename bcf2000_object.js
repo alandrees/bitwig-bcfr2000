@@ -28,10 +28,13 @@ BCF.BCF2000Controller = function(options, instance, control_builder, channel)
 {
     this.set_options(options);
     this.instance = instance;
+    this.enable_output = false;
 
     this.channel = channel;
 
     this.io_controller = false;
+    this.io_instance = 0;
+
 
     this.controls = control_builder.call(this);
 
@@ -64,6 +67,7 @@ BCF.BCF2000Controller.prototype.init = function(io_controller, banks)
     //setup observers
 
     BCF.bind_observers.call(this);
+    this.enable_output = true;
 }
 
 /**\fn BCF.BCF2000Controller.prototype.exit
@@ -93,13 +97,6 @@ BCF.BCF2000Controller.prototype.exit = function()
 
 BCF.BCF2000Controller.prototype.flush = function()
 {
-    for(var i = 0; i < this.indexed_controls; i++)
-    {
-	for(var callback in this.output_callbacks)
-	{
-	    output_callbacks[callback].call(this, 127, i);
-	}
-    }
 }
 
 /**\fn BCF.BCFController.prototype.onMidi
@@ -206,10 +203,28 @@ BCF.BCF2000Controller.prototype.build_indexed_controls = function()
 }
 
 
+/**\fn BCF.BCF2000Controller.prototype.send_midi
+ *
+ * Sends a midi message using the specified IO
+ *
+ * @param status
+ * @param data1
+ * @param data2
+ *
+ * @returns None
+ */
+
+BCF.BCF2000Controller.prototype.send_midi = function(status, data1, data2){
+    sendMidi(status, 
+	     data1,
+	     data2, 
+	     this.instance);
+}
+
 /**\fn BCF.bind_observers
  *
  * Implementation-specific function to bind observers
- * 
+ * CALLED With this pointing to the BCF instance
  *
  * @param None
  *
@@ -226,93 +241,262 @@ BCF.bind_observers = function()
 
     this.output_callbacks.volumefunc = function(value, index)
     {
+	if(this.enable_output)
+	{
+	    var status = 0xB0 + this.channel;
+	    var data1  = 0;
+	    var data2  = value;
 
+	    for(var control in this.indexed_controls[index])
+	    {
+		if(this.indexed_controls[index][control].param === 'volume')
+		{
+		    data1 = this.indexed_controls[index][control].control;
+		}
+	    }
+
+	    if(this.indexed_controls[index][control].value != value)
+	    {
+		this.indexed_controls[index][control].value = value;
+
+		this.send_midi(status,
+			       data1,
+			       data2);
+	    }
+	}
     }
-
-    this.output_callbacks.sendfunc = function(sendid, value, index)
+	    
+    this.output_callbacks.sendfunc = function(value, index, sendid)
     {
+	if(this.enable_output)
+	{
+	    var status = 0xB0 + this.channel;
+	    var data1  = 0;
+	    var data2  = value;
 
+	    switch(sendid)
+	    {
+	    case 0:
+		var sendbank = "senda";
+		break;
+	    case 1:
+		var sendbank = "sendb";
+		break;
+	    case 2:
+		var sendbank = "sendc";
+		break;
+	    default:
+		println('invalid send');
+	    }
+
+	    for(var control in this.indexed_controls[index])
+	    {
+		if(this.indexed_controls[index][control].param === sendbank)
+		{
+		    data1 = this.indexed_controls[index][control].control;
+		    break;
+		}
+	    }
+
+	    if(this.indexed_controls[index][control].value != value)
+	    {
+		this.indexed_controls[index][control].value = value;
+
+		this.send_midi(status,
+			       data1,
+			       data2);
+	    }
+	}
     }
 
     this.output_callbacks.panfunc = function(value, index)
     {
+	if(this.enable_output)
+	{
+	    var status = 0xB0 + this.channel;
+	    var data1  = 0;
+	    var data2  = value;
 
+	    for(var control in this.indexed_controls[index])
+	    {
+		if(this.indexed_controls[index][control].param === 'pan')
+		{
+		    data1 = this.indexed_controls[index][control].control;
+		}
+	    }
+
+	    if(this.indexed_controls[index][control].value != value)
+	    {
+		this.indexed_controls[index][control].value = value;
+
+		this.send_midi(status,
+			       data1,
+			       data2);
+	    }
+	}	
     }
 
     this.output_callbacks.solofunc = function(value, index)
     {
+	if(this.enable_output)
+	{
+	    var status = 0xB0 + this.channel;
+	    var data1  = 0;
+	    var data2  = value === true ? 127 : 0;
 
+	    for(var control in this.indexed_controls[index])
+	    {
+		if(this.indexed_controls[index][control].param === 'solo')
+		{
+		    data1 = this.indexed_controls[index][control].control;
+		}
+	    }
+
+	    if(this.indexed_controls[index][control].value != value)
+	    {
+		this.indexed_controls[index][control].value = value;
+
+		this.send_midi(status,
+			       data1,
+			       data2);
+	    }
+	}
     }
 
     this.output_callbacks.armfunc = function(value, index)
     {
+	if(this.enable_output)
+	{
+	    var status = 0xB0 + this.channel;
+	    var data1  = 0;
+	    var data2  = value === true ? 127 : 0;
 
+	    for(var control in this.indexed_controls[index])
+	    {
+		if(this.indexed_controls[index][control].param === 'arm')
+		{
+		    data1 = this.indexed_controls[index][control].control;
+		}
+	    }
+
+	    if(this.indexed_controls[index][control].value != value)
+	    {
+		this.indexed_controls[index][control].value = value;
+
+		this.send_midi(status,
+			       data1,
+			       data2);
+	    }
+	}
     }
 
     this.output_callbacks.mutefunc = function(value, index)
     {
+	if(this.enable_output)
+	{
+	    var status = 0xB0 + this.channel;
+	    var data1  = 0;
+	    var data2  = value === true ? 127 : 0;
 
+	    for(var control in this.indexed_controls[index])
+	    {
+		if(this.indexed_controls[index][control].param === 'mute')
+		{
+		    data1 = this.indexed_controls[index][control].control;
+		}
+	    }
+
+	    if(this.indexed_controls[index][control].value != value)
+	    {
+		this.indexed_controls[index][control].value = value;
+
+		this.send_midi(status,
+			       data1,
+			       data2);
+	    }
+	}
     }
-
+    
+    var tracks = [];
+    
     for(var index = 0; index < this.indexed_controls.length; index++)
     {
-	var track = this.banks.trackbank.getTrack(index);
+	tracks[index] = this.banks.trackbank.getTrack(index);
 
-	track.getVolume().addValueObserver(127,
+	//volume observer
+	tracks[index].getVolume().addValueObserver(128,
 					   (function(cb, index)
 					   {
 					       return function(value)
 					       {
 						   cb(value, index);
 					       }
-					   }).call(this, self.output_callbacks.volumefunc, index));
+					   }).call(this, 
+						   function(v, n){ self.output_callbacks.volumefunc.call(self, v, n); }, 
+						   index));
 
+
+	//sends observer
 	for(var send_index = 0; send_index < this.options.sends; send_index++)
 	{
-	    track.getSend(send_index).addValueObserver(127,
-						       (function(sendid, cb, index)
-							{
-							    return function(value)
-							    {
-								cb(sendid, value, index);
-							    }
-							}).call(this, send_index, self.output_callbacks.sendfunc, index));
-						       
+	    tracks[index].getSend(send_index).addValueObserver(127,
+							       (function(cb, index, sendid)
+								{
+								    return function(value)
+								    {
+									cb(value, index, sendid);
+								    }
+								}).call(this, 
+									function(v, n, s){ self.output_callbacks.sendfunc.call(self, v, n, s); }, 
+									index,
+									send_index));
 	}
 
-	track.getPan().addValueObserver(127,
-					   (function(cb, index)
-					   {
-					       return function(value)
-					       {
-						   cb(value, index);
-					       }
-					   }).call(this, self.output_callbacks.panfunc, index));
+	//pan observer
+	tracks[index].getPan().addValueObserver(127,
+						(function(cb, index)
+						 {
+						     return function(value)
+						     {
+							 cb(value, index);
+						     }
+						 }).call(this, 
+							 function(v, n){ self.output_callbacks.panfunc.call(self, v, n); }, 
+							 index));
 
-	track.getSolo().addValueObserver((function(cb, index)
-					  {
-					      return function(value)
-					      {
-						  cb(value, index);
-					      }
-					  }).call(this, self.output_callbacks.solofunc, index));
-	
-	track.getArm().addValueObserver((function(cb, index)
-					  {
-					      return function(value)
-					      {
-						  cb(value, index);
-					      }
-					  }).call(this, self.output_callbacks.armfunc, index));
-	
-	track.getMute().addValueObserver((function(cb, index)
-					  {
-					      return function(value)
-					      {
-						  cb(value, index);
-					      }
-					  }).call(this, self.output_callbacks.armfunc, index));
-    }	
+	//solo observer
+	tracks[index].getSolo().addValueObserver((function(cb, index)
+						 {
+						     return function(value)
+						     {
+							 cb(value, index);
+						     }
+						 }).call(this, 
+							 function(v, n){ self.output_callbacks.solofunc.call(self, v, n); }, 
+							 index));
+		
+	//arm observer
+	tracks[index].getArm().addValueObserver((function(cb, index)
+						 {
+						     return function(value)
+						     {
+							 cb(value, index);
+						     }
+						 }).call(this, 
+							 function(v, n){ self.output_callbacks.armfunc.call(self, v, n); }, 
+							 index));
+	//mute observer
+	tracks[index].getMute().addValueObserver((function(cb, index)
+						 {
+						     return function(value)
+						     {
+							 cb(value, index);
+						     }
+						 }).call(this, 
+							 function(v, n){ self.output_callbacks.mutefunc.call(self, v, n); }, 
+							 index));
+    }
+
 }    
 
 
@@ -353,8 +537,9 @@ BCF.build_control_layout = function()
     for(var index = 0; index < ccs.length; index++){
 	return_value[ccs[index]] = new BC.Fader(127, 0, ccs[index], 0);
 	return_value[ccs[index]].track_index = index;
+	return_value[ccs[index]].param = 'volume';
 	return_value[ccs[index]].callback = {'cb'   : x,
-					     'obj' : this};
+					     'obj'  : this};
     }
 
     //the 16 top buttons
@@ -370,15 +555,16 @@ BCF.build_control_layout = function()
 
 	if(typeof track !== 'null')
 	{
-	    track.getVolume().set(value, BC.MIDI_MAX);
+	    track.getArm().toggle();
 	}
 
-	track.getArm().toggle();
+
     }
 
     for(var index = 0; index < ccs.length; index++){
 	return_value[ccs[index]] = new BC.Button(127, 0, ccs[index], 0);
 	return_value[ccs[index]].track_index = index;
+	return_value[ccs[index]].param = 'arm';
 	return_value[ccs[index]].callback = {'cb'   : x,
 					     'obj' : this};
     }
@@ -398,6 +584,7 @@ BCF.build_control_layout = function()
     for(var index = 0; index < ccs.length; index++){
 	return_value[ccs[index]] = new BC.Button(127, 0, ccs[index], 0);
 	return_value[ccs[index]].track_index = index;
+	return_value[ccs[index]].param = 'mute';
 	return_value[ccs[index]].callback = {'cb'   : x,
 					     'obj' : this};
     }
@@ -418,6 +605,7 @@ BCF.build_control_layout = function()
     for(var index = 0; index < ccs.length; index++){
 	return_value[ccs[index]] = new BC.Encoder(127, 0, ccs[index], 0);
 	return_value[ccs[index]].track_index = index;
+	return_value[ccs[index]].param = 'pan';
 	return_value[ccs[index]].callback = {'cb'   : x,
 					     'obj' : this};
     }
@@ -438,6 +626,7 @@ BCF.build_control_layout = function()
     for(var index = 0; index < ccs.length; index++){
 	return_value[ccs[index]] = new BC.Encoder(127, 0, ccs[index], 0);
 	return_value[ccs[index]].track_index = index;
+	return_value[ccs[index]].param = 'senda';
 	return_value[ccs[index]].callback = {'cb'   : x,
 					     'obj' : this};
     }
@@ -457,6 +646,7 @@ BCF.build_control_layout = function()
     for(var index = 0; index < ccs.length; index++){
 	return_value[ccs[index]] = new BC.Encoder(127, 0, ccs[index], 0);
 	return_value[ccs[index]].track_index = index;
+	return_value[ccs[index]].param = 'sendb';
 	return_value[ccs[index]].callback = {'cb'   : x,
 					     'obj' : this};
     }
@@ -476,6 +666,7 @@ BCF.build_control_layout = function()
     for(var index = 0; index < ccs.length; index++){
 	return_value[ccs[index]] = new BC.Encoder(127, 0, ccs[index], 0);
 	return_value[ccs[index]].track_index = index;
+	return_value[ccs[index]].param = 'sendc';
 	return_value[ccs[index]].callback = {'cb'   : x,
 					     'obj' : this};
     }
@@ -498,6 +689,7 @@ BCF.build_control_layout = function()
     for(var index = 0; index < ccs.length; index++){
 	return_value[ccs[index]] = new BC.Button(127, 0, ccs[index], 0);
 	return_value[ccs[index]].track_index = index;
+	return_value[ccs[index]].param = 'solo';
 	return_value[ccs[index]].callback = {'cb'   : x,
 					     'obj' : this};
     }
@@ -514,17 +706,24 @@ BCF.build_control_layout = function()
 	    return_value[ccs[index]].callback = {'cb'   : function(midi, control){if(midi.data2 != 0) this.banks.trackbank.scrollTracksUp();},
 						 'obj' : this};
 	}
-	else if(index === 1)
+	
+	if(index === 1)
 	{
 	    return_value[ccs[index]].callback = {'cb'   : function(midi, control){if(midi.data2 != 0) this.banks.trackbank.scrollTracksDown();},
 						 'obj' : this};
 	}
-	else
+	
+	if(index === 2)
 	{
 	    return_value[ccs[index]].callback = {'cb'   : function(midi, control){},
 						 'obj' : this};
 	}
 
+	if(index === 3)
+	{
+	    return_value[ccs[index]].callback = {'cb'   : function(midi, control){},
+						 'obj' : this};
+	}
     }
 
     return return_value
