@@ -63,7 +63,6 @@ BCF.BCF2000Controller.prototype.init = function(io_controller, banks)
     this.banks = banks;
 
     //setup observers
-
     BCF.bind_observers.call(this);
     this.enable_output = true;
 }
@@ -101,10 +100,9 @@ BCF.BCF2000Controller.prototype.flush = function()
  *
  * Function to be fired on midi input from the controller
  *
- * @param status
- * @param data1
- * @param data2
- * @param banks banks object
+ * @param status midi status byte
+ * @param data1 midi data byte 1
+ * @param data2 midi data byte 2
  *
  * @returns None
  */
@@ -205,9 +203,9 @@ BCF.BCF2000Controller.prototype.build_indexed_controls = function()
  *
  * Sends a midi message using the specified IO
  *
- * @param status
- * @param data1
- * @param data2
+ * @param status midi status byte
+ * @param data1 midi data1 byte
+ * @param data2 midi data2 byte
  *
  * @returns None
  */
@@ -515,7 +513,7 @@ BCF.build_control_layout = function()
     var ccs = [];
     var return_value = {};
     var self = this;
-    var x = function(midi, control, tb){};
+    var x = function(midi, control){};
 
     //first build a list of faders
     ccs = [32, 33, 34, 35, 36, 37, 38, 39];
@@ -536,8 +534,8 @@ BCF.build_control_layout = function()
 	return_value[ccs[index]] = new BC.Fader(127, 0, ccs[index], 0);
 	return_value[ccs[index]].track_index = index;
 	return_value[ccs[index]].param = 'volume';
-	return_value[ccs[index]].callback = {'cb'   : x,
-					     'obj'  : this};
+	return_value[ccs[index]].callback = {'cb'  : x,
+					     'obj' : this};
     }
 
     //the 16 top buttons
