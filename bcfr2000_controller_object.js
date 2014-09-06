@@ -172,7 +172,7 @@ BCFR2000.BCFRController.prototype.onMidi = function(status, data1, data2)
     {
 	if(this.bcr[bcr_device].channel === MIDIChannel(status))
 	{
-	    this.bcf[bcf_device].onMidi(status, data1, data2, this.banks);
+	    this.bcr[bcr_device].onMidi(status, data1, data2, this.banks);
 	    return;
 	}
     }
