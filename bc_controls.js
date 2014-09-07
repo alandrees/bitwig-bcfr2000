@@ -10,6 +10,8 @@
 var BC = BC || {};
 
 BC.MIDI_MAX = 127; //constant for MIDI CC's.  Change this if using NRPN's or something with a higher resolution.
+BC.MIDI_ON = BC.MIDI_MAX; //constant for MIDI on value
+BC.MIDI_OFF = 0;          //constant for MIDI off value
 
 /**\fn BC.Control
  *
