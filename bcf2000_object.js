@@ -521,7 +521,7 @@ BCF.build_control_layout = function()
     x = function(midi, control)
     {
 	var value = midi.data2;
-	
+
 	var track = this.banks.trackbank.getTrack(control.track_index)
 
 	if(typeof track !== 'null')
@@ -574,7 +574,10 @@ BCF.build_control_layout = function()
 	
 	var track = this.banks.trackbank.getTrack(control.track_index)
 
-	track.getMute().toggle();
+	if(typeof track !== 'null')
+	{
+	    track.getMute().toggle();
+	}
     }
 
     for(var index = 0; index < ccs.length; index++){
@@ -592,10 +595,14 @@ BCF.build_control_layout = function()
     x = function(midi, control)
     {
 	var value = midi.data2;
-	
+
 	var track = this.banks.trackbank.getTrack(control.track_index)
 
-	track.getPan().set(value, BC.MIDI_MAX);
+	if(typeof track !== 'null')
+	{
+	    track.getPan().set(value, BC.MIDI_MAX);
+	}
+	
     }
 
     for(var index = 0; index < ccs.length; index++){
@@ -616,7 +623,10 @@ BCF.build_control_layout = function()
 	
 	var track = this.banks.trackbank.getTrack(control.track_index)
 
-	track.getSend(0).set(value, BC.MIDI_MAX);
+	if(typeof track !== 'null')
+	{
+	    track.getSend(0).set(value, BC.MIDI_MAX);
+	}
     }
 
     for(var index = 0; index < ccs.length; index++){
@@ -636,7 +646,10 @@ BCF.build_control_layout = function()
 	
 	var track = this.banks.trackbank.getTrack(control.track_index)
 
-	track.getSend(1).set(value, BC.MIDI_MAX);
+	if(typeof track !== 'null')
+	{
+	    track.getSend(1).set(value, BC.MIDI_MAX);
+	}
     }
     
     for(var index = 0; index < ccs.length; index++){
@@ -656,7 +669,10 @@ BCF.build_control_layout = function()
 	
 	var track = this.banks.trackbank.getTrack(control.track_index)
 
-	track.getSend(2).set(value, BC.MIDI_MAX);
+	if(typeof track !== 'null')
+	{
+	    track.getSend(2).set(value, BC.MIDI_MAX);
+	}
     }
 
     for(var index = 0; index < ccs.length; index++){
@@ -679,7 +695,10 @@ BCF.build_control_layout = function()
 	
 	var track = this.banks.trackbank.getTrack(control.track_index)
 
-	track.getSolo().toggle();
+	if(typeof track !== 'null')
+	{
+	    track.getSolo().toggle();
+	}
     }
 
     for(var index = 0; index < ccs.length; index++){
