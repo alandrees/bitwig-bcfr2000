@@ -66,7 +66,7 @@ BCFR2000.BCFRController.prototype.init = function()
     this.banks.cursortrack  = host.createCursorTrack(this.options.sends, this.options.scenes);
     this.banks.cursordevice = host.createCursorDevice();
     this.banks.transport    = host.createTransport();
-    this.banks.master_track = host.createMasterTrack;
+    this.banks.master_track = host.createMasterTrack(this.options.scenes);
 
     var io = true;
 
