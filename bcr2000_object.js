@@ -53,9 +53,9 @@ BCR.BCR2000Controller = function(options, instance, control_builder, channel)
     this.parameter_offset = 0;
 
     this.controls = control_builder.call(this);
-    this.tempo_lock = false;
-    this.master_volume_lock = false;
-    this.transport_lock = false;
+    this.tempo_lock = true;
+    this.master_volume_lock = true;
+    this.transport_lock = true;
 
     this.indexed_controls = this.build_indexed_controls();
 }
@@ -658,7 +658,7 @@ BCR.build_control_layout = function()
 		}
 		else
 		{
-		    var data2 = BC.MIDI_ON;
+		    var data2 = BC.MIDI_OFF;
 		    //need to make sure we update the parameter with the most recent value so we don't get parameter jumping
 		}
 		
@@ -688,7 +688,7 @@ BCR.build_control_layout = function()
 		    var data2 = BC.MIDI_OFF;
 		    //need to make sure we update the parameter with the most recent value so we don't get parameter jumping
 		}
-		
+			
 		this.send_midi(status,
 			       data1,
 			       data2);			   
