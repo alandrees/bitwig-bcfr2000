@@ -10,6 +10,13 @@
  *
  */
 
+/*
+TODO:
+1: fix parameter pages to work how I want them to work (using user pages)
+2: fix nested macros upon release of version 1.1
+3: display the parameter page name on change
+*/
+
 var BCR = BCR || {};
 
 //constants to define the 4 grouped banks
