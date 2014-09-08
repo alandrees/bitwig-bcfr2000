@@ -49,7 +49,6 @@ BCF.options = {'channel'  : 1,
 /**\fn BCR.options
  *
  * Options used for the BCR2000 portion of the controller
- * BPM ranges don't map directly to BPMs, but these two values indicate low at 75, and high at 200
  *
  */
 
@@ -64,6 +63,6 @@ BCR.options = {'channel' : 2,
 	       'sends'    : BCFR2000.options.sends  || 3,
 	       'scenes'   : BCFR2000.options.scenes || 0,
 	       'enable_preset_switching' : false,
-	       'bpm_low'  : 57,
-	       'bpm_high' : 185};
+	       'bpm_low'  : 75,
+	       'bpm_high' : 200};
 
