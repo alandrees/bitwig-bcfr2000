@@ -13,10 +13,16 @@ loadAPI(1);
 
 var console = {};
 
+console.debug = false;
+
 console.log = function(string)
 {
-    println(string);
+    if(console.debug === true)
+    {
+	println(string);
+    }
 };
+
 
 load('bcfr2000_options.js');
 load('bcfr2000_controller_object.js');
