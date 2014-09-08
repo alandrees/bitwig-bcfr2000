@@ -337,8 +337,24 @@ BCR.build_control_layout = function()
     {
 	if(typeof control.param_index !== 'undefined')
 	{
-	    this.banks.cursordevice.getParameter(this.parameter_offset + control.param_index).set(128, midi.data2);
+	    try{
+		this.banks.cursordevice.getParameter(control.param_index).set(midi.data2,
+									      128);
+	    }catch(e){
+	/*	try{
+		    this.banks.cursordevice.getEnvelopeParameter(control.param_index).set(midi.data2,
+											  128);
+		}catch(e){
+		    try{
+			this.banks.cursordevice.getCommonParameter(control.param_index).set(midi.data2,
+											    128);
+		    }catch(e){
+		    }
+		}
+	*/
+	    }
 	}
+
     }
 
     var tempo_controller = function(midi, control)
@@ -368,9 +384,9 @@ BCR.build_control_layout = function()
 	return_value[ccs[index]] = new BC.Encoder(BC.MIDI_MAX, 0, ccs[index], 0);
 	return_value[ccs[index]].track_index = index;
 
-	if(index === 0 || index === 1)
+	if(index < 3)
 	{
-	    return_value[ccs[index]].param_index = ++param_index;
+	    return_value[ccs[index]].param_index = param_index++;
 	    return_value[ccs[index]].param = 'encoder-param';
 	    return_value[ccs[index]].callback = {'cb'  : param_encoders,
 						 'obj' : this};
@@ -395,9 +411,9 @@ BCR.build_control_layout = function()
 	return_value[ccs[index]] = new BC.Encoder(BC.MIDI_MAX, 0, ccs[index], 0);
 	return_value[ccs[index]].track_index = index;
 
-	if(index === 0 || index === 1)
+	if(index < 3)
 	{
-	    return_value[ccs[index]].param_index = ++param_index;
+	    return_value[ccs[index]].param_index = param_index++;
 	    return_value[ccs[index]].param = 'encoder-param';
 	    return_value[ccs[index]].callback = {'cb'  : param_encoders,
 						 'obj' : this};
@@ -423,9 +439,9 @@ BCR.build_control_layout = function()
 	return_value[ccs[index]] = new BC.Encoder(BC.MIDI_MAX, 0, ccs[index], 0);
 	return_value[ccs[index]].track_index = index;
 
-	if(index === 0 || index === 1)
+	if(index < 3)
 	{
-	    return_value[ccs[index]].param_index = ++param_index;
+	    return_value[ccs[index]].param_index = param_index++;
 	    return_value[ccs[index]].param = 'encoder-param';
 	    return_value[ccs[index]].callback = {'cb'  : param_encoders,
 						 'obj' : this};
@@ -450,19 +466,15 @@ BCR.build_control_layout = function()
 	return_value[ccs[index]].track_index = index;
 	return_value[ccs[index]].param = 'button-top';
 
-	if( (index === 0) )
+	if( index === 0 )
 	{
-	    var param_offset_increment = function(midi, control)
-	    {
-		if(midi.data2 === BC.MIDI_ON)
-		{
-		    this.parameter_offset++
-		}
-	    }
-
-	    return_value[ccs[index]].callback = {'cb'  : param_offset_increment,
+	    return_value[ccs[index]].callback = {'cb'  : function(midi, control){ this.banks.cursordevice.previousParameterPage(); },
 						 'obj' : this};
-	    
+ 	}
+	else if ( index === 1)
+	{
+	    return_value[ccs[index]].callback = {'cb'  : function(midi, control){ this.banks.cursordevice.nextParameterPage(); },
+						 'obj' : this};
 	}
 	else
 	{
@@ -482,16 +494,6 @@ BCR.build_control_layout = function()
 
 	if( (index === 0) )
 	{
-	    var param_offset_decrement = function(midi, control)
-	    {
-		if(midi.data2 === BC.MIDI_ON)
-		{
-		    this.parameter_offset = Math.max(--this.parameter_offset, 0);
-		}
-	    }
-
-	    return_value[ccs[index]].callback = {'cb'  : param_offset_decrement,
-						 'obj' : this};
 	}
 	else
 	{
@@ -768,29 +770,30 @@ BCR.bind_observers = function()
 
     this.output_callbacks.macro_func = function(value, index)
     {
-	if(this.enable_output)
-	{
-	    var controllist = new Array();
+	var controllist = new Array();
 
-	    for(var controlid in this.controls)
+	for(var controlid in this.controls)
+	{
+	    if(typeof this.controls[controlid].param !== 'undefined')
 	    {
-		if(this.controls.track_index ===  index)
+		if( (this.controls[controlid].track_index ===  index) && (this.controls[controlid].param.indexOf('encoder-group') !== -1) )
 		{
 		    controllist.push(this.controls[controlid]);
-		    break;
 		}
 	    }
+	}
 
-	    for(var i = 0; i < controllist.length; i++)
-	    {
-		var status = 0xB0 + this.channel;
-		var data1  = control.control;
-		var data2  = value;
+	for(var i = 0; i < controllist.length; i++)
+	{
+	    var control = controllist[i];
+	    
+	    var status = 0xB0 + this.channel;
+	    var data1  = control.control;
+	    var data2  = value;
 
-		this.send_midi(status,
-			       data1,
-			       data2);
-	    }
+	    this.send_midi(status,
+			   data1,
+			   data2);
 	}
     }
 
@@ -818,14 +821,14 @@ BCR.bind_observers = function()
     for(var i = 0; i < 8; i++)
     {
 	this.banks.cursordevice.getMacro(i).getAmount().addValueObserver(BC.MIDI_MAX,
-									 (function(cb)
+									 (function(cb, index)
 									  {
 									      return function(value)
 									      {
-										  cb(value);
+										  cb(value, index);
 									      }
 									  }).call(this,
-										  function(v){ self.output_callbacks.tempofunc.call(self, v); }, 
+										  function(v, i){ self.output_callbacks.macro_func.call(self, v, i); }, 
 										  i));
     }
 
@@ -839,7 +842,8 @@ BCR.bind_observers = function()
 							  }
 						      }).call(this,
 							      function(v){ self.output_callbacks.tempofunc.call(self, v); }));
-
+    
+    //master volume update
     this.banks.master_track.getVolume().addValueObserver(BC.MIDI_MAX,
 							 (function(cb)
 							  {
@@ -849,6 +853,7 @@ BCR.bind_observers = function()
 							      }
 							  }).call(this,
 								  function(v){ self.output_callbacks.master_func.call(self, v); }));
+
 
 
     if(this.options.enable_preset_switching)
