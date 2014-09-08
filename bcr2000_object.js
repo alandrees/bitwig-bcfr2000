@@ -361,9 +361,9 @@ BCR.build_control_layout = function()
     {
 	if(!this.tempo_lock)
 	{
-	    var value = (midi.data2 / BC.MIDI_MAX) * (this.options.bpm_high - this.options.bpm_low) + this.options.bpm_low;
+	    var value = (midi.data2 / BC.MIDI_MAX) * (this.options.bpm_high - this.options.bpm_low) + this.options.bpm_low - 20;
 
-	    this.banks.transport.getTempo().set(Math.round(value), 666);
+	    this.banks.transport.getTempo().set(Math.round(value), 647);
 	}
     }
 
