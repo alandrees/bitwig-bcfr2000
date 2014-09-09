@@ -11,6 +11,11 @@
  *
  */
 
+/*
+TODO:
+1. Modify constructor parameters to handle taking a midi instance and object instance
+*/
+
 var BCFR2000 = BCFR2000 || {};
 if(typeof BCFR2000.BCFRController === 'undefined') BCFR2000.BCFRController = {};
 
@@ -51,22 +56,29 @@ BCFR2000.BCFRController = function(options, instance)
  *
  * Init function to be called to initalize the 
  *
- * @param None
+ * @param banks banks object passed from an encapsulating controller
  *
  * @returns None
  */
 
-BCFR2000.BCFRController.prototype.init = function()
+BCFR2000.BCFRController.prototype.init = function(banks)
 {
     var self = this;
 
     host.getMidiInPort(this.instance).setMidiCallback(function(status, data1, data2){self.onMidi(status, data1, data2);});
 
-    this.banks.trackbank    = host.createMainTrackBank(this.options.tracks, this.options.sends, this.options.scenes);
-    this.banks.cursortrack  = host.createCursorTrack(this.options.sends, this.options.scenes);
-    this.banks.cursordevice = host.createCursorDevice();
-    this.banks.transport    = host.createTransport();
-    this.banks.master_track = host.createMasterTrack(this.options.scenes);
+    if(typeof banks === 'undefined')
+    {
+	this.banks.trackbank    = host.createMainTrackBank(this.options.tracks, this.options.sends, this.options.scenes);
+	this.banks.cursortrack  = host.createCursorTrack(this.options.sends, this.options.scenes);
+	this.banks.cursordevice = host.createCursorDevice();
+	this.banks.transport    = host.createTransport();
+	this.banks.master_track = host.createMasterTrack(this.options.scenes);
+    }
+    else
+    {
+	this.banks = banks;
+    }
 
     var io = true;
 
