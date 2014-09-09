@@ -46,6 +46,15 @@ icc_network.push(ICC.create_new_icc_network('bcfr2000'));
 
 controllers[0] = new BCFR2000.BCFRController(BCFR2000.options, 0);
 
+/**\fn init
+ *
+ * init function entry point wrapping the controller components
+ *
+ * @param None
+ *
+ * @returns None
+ */
+
 function init()
 {
     for(var controller in controllers)
