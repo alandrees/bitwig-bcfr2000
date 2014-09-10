@@ -38,6 +38,7 @@ BCF.BCF2000Controller = function(options, instance, control_builder, channel, mi
     this.io_controller = false;
     this.io_instance = 0;
 
+    this.track_offset
 
     this.controls = control_builder.call(this);
 
@@ -57,10 +58,6 @@ BCF.BCF2000Controller = function(options, instance, control_builder, channel, mi
 
 BCF.BCF2000Controller.prototype.init = function(io_controller, banks)
 {
-    if(typeof track_offset === 'undefined'){ var track_offset = 0; }
-
-    this.track_offset = track_offset;
-
     this.io_controller = io_controller;
  
     this.banks = banks;
@@ -717,18 +714,56 @@ BCF.build_control_layout = function()
    
     ccs = [89, 90, 91, 92]
 
+    var banking = function(midi, control)
+    {
+	if(control.control == 89)
+	{
+	    if(midi.data2 == 127) 
+	    {
+		this.track_offset = 0; 
+
+		var status = 0xB0 + this.channel;
+
+		this.send_midi(status,
+			       89,
+			       127);
+
+		this.send_midi(status,
+			       90,
+			       0);
+	    }
+	}
+	else if(control.control == 90)
+	{
+	    if(midi.data2 == 127) 
+	    {
+		this.track_offset = 8; 
+
+		var status = 0xB0 + this.channel;
+
+		this.send_midi(status,
+			       89,
+			       0);
+
+		this.send_midi(status,
+			       90,
+			       127);
+	    }
+	}
+    }
+
     for(var index = 0; index < ccs.length; index++){
 	return_value[ccs[index]] = new BC.Encoder(BC.MIDI_MAX, 0, ccs[index], 0);
 	
 	if(index === 0)
 	{
-	    return_value[ccs[index]].callback = {'cb'   : function(midi, control){if(midi.data2 != 0) this.banks.trackbank.scrollTracksUp();},
+	    return_value[ccs[index]].callback = {'cb'   : banking,
 						 'obj' : this};
 	}
 	
 	if(index === 1)
 	{
-	    return_value[ccs[index]].callback = {'cb'   : function(midi, control){if(midi.data2 != 0) this.banks.trackbank.scrollTracksDown();},
+	    return_value[ccs[index]].callback = {'cb'   : banking,
 						 'obj' : this};
 	}
 	
