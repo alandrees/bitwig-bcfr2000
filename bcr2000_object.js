@@ -33,15 +33,20 @@ BCR.MACRO_BANK4 = 4;
  * @param instace instance of the controller
  * @param control_builder function to build the control objects
  * @param channel channel this controller exists on
+ * @param midi_instance midi io instance this controller exists on
+ *
  *
  * @returns None
  */
 
 
-BCR.BCR2000Controller = function(options, instance, control_builder, channel)
+BCR.BCR2000Controller = function(options, instance, control_builder, channel, midi_instance)
 {
+    if(typeof midi_instance === 'undefined') var midi_instance = instance;
+
     this.set_options(options);
     this.instance = instance;
+    this.midi_instance = midi_instance
     this.enable_output = false;
 
     if(this.options.enable_preset_switching === false)
@@ -247,7 +252,7 @@ BCR.BCR2000Controller.prototype.send_midi = function(status, data1, data2){
     sendMidi(status, 
 	     data1,
 	     data2, 
-	     this.instance);
+	     this.midi_instance);
 }
 
 /**\fn BCR.BCR2000Controller.prototype.calc_preset_switch
