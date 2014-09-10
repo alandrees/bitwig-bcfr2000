@@ -20,17 +20,20 @@ var BCF = BCF || {};
  * @param instace instance of the controller
  * @param control_builder function to build the control objects
  * @param channel channel this controller exists on
+ * @param midi_instance midi io instance this controller exists on
  *
  * @returns None
  */
 
-BCF.BCF2000Controller = function(options, instance, control_builder, channel)
+BCF.BCF2000Controller = function(options, instance, control_builder, channel, midi_instance)
 {
+    if(typeof midi_instance === 'undefined') var midi_instance = instance;
     this.set_options(options);
     this.instance = instance;
-    this.enable_output = false;
-
+    this.midi_instance = midi_instance;
     this.channel = channel;
+
+    this.enable_output = false;
 
     this.io_controller = false;
     this.io_instance = 0;
@@ -214,7 +217,7 @@ BCF.BCF2000Controller.prototype.send_midi = function(status, data1, data2){
     sendMidi(status, 
 	     data1,
 	     data2, 
-	     this.instance);
+	     this.midi_instance);
 }
 
 /**\fn BCF.bind_observers
@@ -258,6 +261,7 @@ BCF.bind_observers = function()
 		this.send_midi(status,
 			       data1,
 			       data2);
+			       
 	    }
 	}
     }
