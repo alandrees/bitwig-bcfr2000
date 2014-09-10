@@ -27,15 +27,21 @@ BCFR2000.BCR_CHANNEL = 0;
  *
  * Constructor for the BCR2000 controller object
  *
- * @param None
+ * @param options options to be passed to the controller object
+ * @param instance object instance
+ * @param midi_instance midi io instance to use
  *
  * @returns None
  */
 
-BCFR2000.BCFRController = function(options, instance)
+BCFR2000.BCFRController = function(options, instance, midi_instance)
 {
+    if(typeof midi_instance === 'undefined') var midi_instance = instance;
+
     this.set_options(options);
     this.instance = instance;
+    
+    this.midi_instance = midi_instance;
 
     this.bcr = new Array();
     this.bcf = new Array();
@@ -43,12 +49,12 @@ BCFR2000.BCFRController = function(options, instance)
     this.banks = {};
     for(var i = 0; i < BCFR2000.options.bcrs; i++)
     {
-	this.bcr.push(new BCR.BCR2000Controller(BCR.options, i, BCR.build_control_layout, BCFR2000.BCR_CHANNEL));
+	this.bcr.push(new BCR.BCR2000Controller(BCR.options, i, BCR.build_control_layout, BCFR2000.BCR_CHANNEL, this.midi_instance));
     }
 
     for(var i = 0; i < BCFR2000.options.bcfs; i++)
     {
-	this.bcf.push(new BCF.BCF2000Controller(BCF.options, i, BCF.build_control_layout, BCFR2000.BCF_CHANNEL));		      
+	this.bcf.push(new BCF.BCF2000Controller(BCF.options, i, BCF.build_control_layout, BCFR2000.BCF_CHANNEL, this.midi_instance));		      
     }
 }
 
@@ -65,7 +71,7 @@ BCFR2000.BCFRController.prototype.init = function(banks)
 {
     var self = this;
 
-    host.getMidiInPort(this.instance).setMidiCallback(function(status, data1, data2){self.onMidi(status, data1, data2);});
+    host.getMidiInPort(this.midi_instance).setMidiCallback(function(status, data1, data2){self.onMidi(status, data1, data2);});
 
     if(typeof banks === 'undefined')
     {
@@ -184,7 +190,7 @@ BCFR2000.BCFRController.prototype.onMidi = function(status, data1, data2)
     {
 	if(this.bcr[bcr_device].channel === MIDIChannel(status))
 	{
-	    this.bcr[bcr_device].onMidi(status, data1, data2, this.banks);
+	    this.bcr[bcr_device].onMidi(status, data1, data2);
 	    return;
 	}
     }
