@@ -42,7 +42,7 @@ for(var pair_index in BCFR2000.options.discoveryname)
 var controllers = new Array();
 var icc_network = new Array();
 
-icc_network.push(ICC.create_new_icc_network('bcfr2000'));
+//icc_network.push(ICC.create_new_icc_network('bcfr2000'));
 
 controllers[0] = new BCFR2000.BCFRController(BCFR2000.options, 0);
 
