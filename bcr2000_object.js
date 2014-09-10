@@ -809,6 +809,12 @@ BCR.bind_observers = function()
 	
     }
 
+    this.output_callbacks.page_change_func = function(pagename)
+    {
+	//eventually output to pagename controller
+	host.showPopupNotification(pagename);
+    }
+
     this.output_callbacks.master_func = function(value)
     {
 	if(this.enable_output)
@@ -825,6 +831,15 @@ BCR.bind_observers = function()
 	}
     }
 
+    self.banks.cursortrack.getPrimaryDevice().addSelectedPageObserver(0,
+								      (function(cb)
+								       {
+									   return function(name)
+									   {
+									       cb(name);
+									   }
+								       }).call(this,
+									       function(n){ self.output_callbacks.page_change_func(n) }));
     for(var i = 0; i < 8; i++)
     {
 	this.banks.cursordevice.getMacro(i).getAmount().addValueObserver(BC.MIDI_MAX,
