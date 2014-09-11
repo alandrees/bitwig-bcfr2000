@@ -249,10 +249,14 @@ BCR.BCR2000Controller.prototype.build_indexed_controls = function()
  */
 
 BCR.BCR2000Controller.prototype.send_midi = function(status, data1, data2){
-    sendMidi(status, 
-	     data1,
-	     data2, 
-	     this.midi_instance);
+    try
+    {
+	host.getMidiOutPort(this.midi_instance).sendMidi(status, data1, data2);
+    }
+    catch(e)
+    {
+
+    }
 }
 
 /**\fn BCR.BCR2000Controller.prototype.calc_preset_switch
