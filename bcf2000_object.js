@@ -248,8 +248,11 @@ BCF.bind_observers = function()
 		if(this.indexed_controls[index][control].param === 'volume')
 		{
 		    data1 = this.indexed_controls[index][control].control;
+		    break;
 		}
 	    }
+
+
 
 	    if(this.indexed_controls[index][control].value != value)
 	    {
@@ -319,6 +322,7 @@ BCF.bind_observers = function()
 		if(this.indexed_controls[index][control].param === 'pan')
 		{
 		    data1 = this.indexed_controls[index][control].control;
+		    break;
 		}
 	    }
 
@@ -346,6 +350,7 @@ BCF.bind_observers = function()
 		if(this.indexed_controls[index][control].param === 'solo')
 		{
 		    data1 = this.indexed_controls[index][control].control;
+		    break;
 		}
 	    }
 
@@ -373,6 +378,7 @@ BCF.bind_observers = function()
 		if(this.indexed_controls[index][control].param === 'arm')
 		{
 		    data1 = this.indexed_controls[index][control].control;
+		    break;
 		}
 	    }
 
@@ -400,6 +406,7 @@ BCF.bind_observers = function()
 		if(this.indexed_controls[index][control].param === 'mute')
 		{
 		    data1 = this.indexed_controls[index][control].control;
+		    break;
 		}
 	    }
 
@@ -525,6 +532,8 @@ BCF.build_control_layout = function()
 
 	var track = this.banks.trackbank.getTrack(control.track_index)
 
+	control.value = value;
+
 	if(typeof track !== 'null')
 	{
 	    track.getVolume().set(value, BC.MIDI_MAX);
@@ -532,7 +541,7 @@ BCF.build_control_layout = function()
     }
 
     for(var index = 0; index < ccs.length; index++){
-	return_value[ccs[index]] = new BC.Fader(BC.MIDI_MAX, 0, ccs[index], 0);
+	return_value[ccs[index]] = new BC.Fader(BC.MIDI_MAX, 0, ccs[index], -1);
 	return_value[ccs[index]].track_index = index;
 	return_value[ccs[index]].param = 'volume';
 	return_value[ccs[index]].callback = {'cb'  : x,
@@ -550,6 +559,8 @@ BCF.build_control_layout = function()
 	
 	var track = this.banks.trackbank.getTrack(control.track_index)
 
+	control.value = value;
+
 	if(typeof track !== 'null')
 	{
 	    track.getArm().toggle();
@@ -559,7 +570,7 @@ BCF.build_control_layout = function()
     }
 
     for(var index = 0; index < ccs.length; index++){
-	return_value[ccs[index]] = new BC.Button(BC.MIDI_MAX, 0, ccs[index], 0);
+	return_value[ccs[index]] = new BC.Button(BC.MIDI_MAX, 0, ccs[index], -1);
 	return_value[ccs[index]].track_index = index;
 	return_value[ccs[index]].param = 'arm';
 	return_value[ccs[index]].callback = {'cb'   : x,
@@ -575,6 +586,8 @@ BCF.build_control_layout = function()
 	
 	var track = this.banks.trackbank.getTrack(control.track_index)
 
+	control.value = value;
+
 	if(typeof track !== 'null')
 	{
 	    track.getMute().toggle();
@@ -582,7 +595,7 @@ BCF.build_control_layout = function()
     }
 
     for(var index = 0; index < ccs.length; index++){
-	return_value[ccs[index]] = new BC.Button(BC.MIDI_MAX, 0, ccs[index], 0);
+	return_value[ccs[index]] = new BC.Button(BC.MIDI_MAX, 0, ccs[index], -1);
 	return_value[ccs[index]].track_index = index;
 	return_value[ccs[index]].param = 'mute';
 	return_value[ccs[index]].callback = {'cb'   : x,
@@ -599,6 +612,8 @@ BCF.build_control_layout = function()
 
 	var track = this.banks.trackbank.getTrack(control.track_index)
 
+	control.value = value;
+
 	if(typeof track !== 'null')
 	{
 	    track.getPan().set(value, BC.MIDI_MAX);
@@ -607,7 +622,7 @@ BCF.build_control_layout = function()
     }
 
     for(var index = 0; index < ccs.length; index++){
-	return_value[ccs[index]] = new BC.Encoder(BC.MIDI_MAX, 0, ccs[index], 0);
+	return_value[ccs[index]] = new BC.Encoder(BC.MIDI_MAX, 0, ccs[index], -1);
 	return_value[ccs[index]].track_index = index;
 	return_value[ccs[index]].param = 'pan';
 	return_value[ccs[index]].callback = {'cb'   : x,
@@ -624,6 +639,8 @@ BCF.build_control_layout = function()
 	
 	var track = this.banks.trackbank.getTrack(control.track_index)
 
+	control.value = value;
+
 	if(typeof track !== 'null')
 	{
 	    track.getSend(0).set(value, BC.MIDI_MAX);
@@ -631,7 +648,7 @@ BCF.build_control_layout = function()
     }
 
     for(var index = 0; index < ccs.length; index++){
-	return_value[ccs[index]] = new BC.Encoder(BC.MIDI_MAX, 0, ccs[index], 0);
+	return_value[ccs[index]] = new BC.Encoder(BC.MIDI_MAX, 0, ccs[index], -1);
 	return_value[ccs[index]].track_index = index;
 	return_value[ccs[index]].param = 'senda';
 	return_value[ccs[index]].callback = {'cb'   : x,
@@ -647,6 +664,8 @@ BCF.build_control_layout = function()
 	
 	var track = this.banks.trackbank.getTrack(control.track_index)
 
+	control.value = value;
+
 	if(typeof track !== 'null')
 	{
 	    track.getSend(1).set(value, BC.MIDI_MAX);
@@ -654,7 +673,7 @@ BCF.build_control_layout = function()
     }
     
     for(var index = 0; index < ccs.length; index++){
-	return_value[ccs[index]] = new BC.Encoder(BC.MIDI_MAX, 0, ccs[index], 0);
+	return_value[ccs[index]] = new BC.Encoder(BC.MIDI_MAX, 0, ccs[index], -1);
 	return_value[ccs[index]].track_index = index;
 	return_value[ccs[index]].param = 'sendb';
 	return_value[ccs[index]].callback = {'cb'   : x,
@@ -670,6 +689,8 @@ BCF.build_control_layout = function()
 	
 	var track = this.banks.trackbank.getTrack(control.track_index)
 
+	control.value = value;
+
 	if(typeof track !== 'null')
 	{
 	    track.getSend(2).set(value, BC.MIDI_MAX);
@@ -677,7 +698,7 @@ BCF.build_control_layout = function()
     }
 
     for(var index = 0; index < ccs.length; index++){
-	return_value[ccs[index]] = new BC.Encoder(BC.MIDI_MAX, 0, ccs[index], 0);
+	return_value[ccs[index]] = new BC.Encoder(BC.MIDI_MAX, 0, ccs[index], -1);
 	return_value[ccs[index]].track_index = index;
 	return_value[ccs[index]].param = 'sendc';
 	return_value[ccs[index]].callback = {'cb'   : x,
@@ -695,6 +716,8 @@ BCF.build_control_layout = function()
 	var value = midi.data2;
 	
 	var track = this.banks.trackbank.getTrack(control.track_index)
+	
+	control.value = value;
 
 	if(typeof track !== 'null')
 	{
@@ -703,7 +726,7 @@ BCF.build_control_layout = function()
     }
 
     for(var index = 0; index < ccs.length; index++){
-	return_value[ccs[index]] = new BC.Button(BC.MIDI_MAX, 0, ccs[index], 0);
+	return_value[ccs[index]] = new BC.Button(BC.MIDI_MAX, 0, ccs[index], -1);
 	return_value[ccs[index]].track_index = index;
 	return_value[ccs[index]].param = 'solo';
 	return_value[ccs[index]].callback = {'cb'   : x,
@@ -724,10 +747,13 @@ BCF.build_control_layout = function()
 
 		var status = 0xB0 + this.channel;
 
+		control.value = 127;
+
 		this.send_midi(status,
-			       89,
+			       control.control,
 			       127);
 
+		this.controls[90].value = 0;
 		this.send_midi(status,
 			       90,
 			       0);
@@ -741,10 +767,12 @@ BCF.build_control_layout = function()
 
 		var status = 0xB0 + this.channel;
 
+		control.value = 127;
 		this.send_midi(status,
-			       89,
+			       control.control,
 			       0);
 
+		this.controls[89].value = 0;
 		this.send_midi(status,
 			       90,
 			       127);
@@ -753,7 +781,7 @@ BCF.build_control_layout = function()
     }
 
     for(var index = 0; index < ccs.length; index++){
-	return_value[ccs[index]] = new BC.Encoder(BC.MIDI_MAX, 0, ccs[index], 0);
+	return_value[ccs[index]] = new BC.Encoder(BC.MIDI_MAX, 0, ccs[index], -1);
 	
 	if(index === 0)
 	{
