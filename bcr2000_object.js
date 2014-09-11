@@ -350,6 +350,7 @@ BCR.build_control_layout = function()
 	if(typeof control.param_index !== 'undefined')
 	{
 	    try{
+		control.value = midi.data2;
 		this.banks.cursordevice.getParameter(control.param_index).set(midi.data2,
 									      128);
 	    }catch(e){
@@ -374,7 +375,7 @@ BCR.build_control_layout = function()
 	if(!this.tempo_lock)
 	{
 	    var value = (midi.data2 / BC.MIDI_MAX) * (this.options.bpm_high - this.options.bpm_low) + this.options.bpm_low - 20;
-
+	    control.value = value;
 	    this.banks.transport.getTempo().set(Math.round(value), 647);
 	}
     }
@@ -384,6 +385,8 @@ BCR.build_control_layout = function()
 	if(!this.master_volume_lock)
 	{
 	    var value = midi.data2;
+
+	    control.value = value;
 	    
 	    this.banks.master_track.getVolume().set(value, 128);
 	}
@@ -393,7 +396,7 @@ BCR.build_control_layout = function()
     var param_index = 0;
 
     for(var index = 0; index < ccs.length; index++){
-	return_value[ccs[index]] = new BC.Encoder(BC.MIDI_MAX, 0, ccs[index], 0);
+	return_value[ccs[index]] = new BC.Encoder(BC.MIDI_MAX, 0, ccs[index], -1);
 	return_value[ccs[index]].track_index = index;
 
 	if(index < 3)
@@ -420,7 +423,7 @@ BCR.build_control_layout = function()
     //middle row
     ccs = [89, 90, 91, 92, 93, 94, 95, 96];
     for(var index = 0; index < ccs.length; index++){
-	return_value[ccs[index]] = new BC.Encoder(BC.MIDI_MAX, 0, ccs[index], 0);
+	return_value[ccs[index]] = new BC.Encoder(BC.MIDI_MAX, 0, ccs[index], -1);
 	return_value[ccs[index]].track_index = index;
 
 	if(index < 3)
@@ -448,7 +451,7 @@ BCR.build_control_layout = function()
     //bottom row
     ccs = [97, 98, 99, 100, 101, 102, 103, 104];
     for(var index = 0; index < ccs.length; index++){
-	return_value[ccs[index]] = new BC.Encoder(BC.MIDI_MAX, 0, ccs[index], 0);
+	return_value[ccs[index]] = new BC.Encoder(BC.MIDI_MAX, 0, ccs[index], -1);
 	return_value[ccs[index]].track_index = index;
 
 	if(index < 3)
@@ -474,7 +477,7 @@ BCR.build_control_layout = function()
 
     ccs = [65, 66, 67, 68, 69, 70, 71, 72];  
     for(var index = 0; index < ccs.length; index++){
-	return_value[ccs[index]] = new BC.Button(BC.MIDI_MAX, 0, ccs[index], 0);
+	return_value[ccs[index]] = new BC.Button(BC.MIDI_MAX, 0, ccs[index], -1);
 	return_value[ccs[index]].track_index = index;
 	return_value[ccs[index]].param = 'button-top';
 
@@ -500,7 +503,7 @@ BCR.build_control_layout = function()
     //bottom row
     ccs = [73, 74, 75, 76, 77, 78, 79, 80];
     for(var index = 0; index < ccs.length; index++){
-	return_value[ccs[index]] = new BC.Button(BC.MIDI_MAX, 0, ccs[index], 0);
+	return_value[ccs[index]] = new BC.Button(BC.MIDI_MAX, 0, ccs[index], -1);
 	return_value[ccs[index]].track_index = index;
 	return_value[ccs[index]].param = 'button-bottom';
 
@@ -564,7 +567,7 @@ BCR.build_control_layout = function()
 
     ccs = [1, 2, 3, 4, 5, 6, 7, 8];
     for(var index = 0; index < ccs.length; index++){
-	return_value[ccs[index]] = new BC.Encoder(BC.MIDI_MAX, 0, ccs[index], 0);
+	return_value[ccs[index]] = new BC.Encoder(BC.MIDI_MAX, 0, ccs[index], -1);
 	return_value[ccs[index]].track_index = index;
 	return_value[ccs[index]].device = BCR.MACRO_BANK1;
 	return_value[ccs[index]].param = 'encoder-group1';
@@ -575,7 +578,7 @@ BCR.build_control_layout = function()
     //group 2
     ccs = [9, 10, 11, 12, 13, 14, 15, 16];
     for(var index = 0; index < ccs.length; index++){
-	return_value[ccs[index]] = new BC.Encoder(BC.MIDI_MAX, 0, ccs[index], 0);
+	return_value[ccs[index]] = new BC.Encoder(BC.MIDI_MAX, 0, ccs[index], -1);
 	return_value[ccs[index]].track_index = index;
 	return_value[ccs[index]].device = BCR.MACRO_BANK2;
 	return_value[ccs[index]].param = 'encoder-group2';
@@ -587,7 +590,7 @@ BCR.build_control_layout = function()
     ccs = [17, 18, 19, 20, 21, 22, 23, 24];
     
     for(var index = 0; index < ccs.length; index++){
-	return_value[ccs[index]] = new BC.Encoder(BC.MIDI_MAX, 0, ccs[index], 0);
+	return_value[ccs[index]] = new BC.Encoder(BC.MIDI_MAX, 0, ccs[index], -1);
 	return_value[ccs[index]].track_index = index;
 	return_value[ccs[index]].device = BCR.MACRO_BANK3;
 	return_value[ccs[index]].param = 'encoder-group3';
@@ -599,7 +602,7 @@ BCR.build_control_layout = function()
     ccs = [25, 26, 27, 28, 29, 30, 31, 32];
 
     for(var index = 0; index < ccs.length; index++){
-	return_value[ccs[index]] = new BC.Encoder(BC.MIDI_MAX, 0, ccs[index], 0);
+	return_value[ccs[index]] = new BC.Encoder(BC.MIDI_MAX, 0, ccs[index], -1);
 	return_value[ccs[index]].track_index = index;
 	return_value[ccs[index]].device = BCR.MACRO_BANK4;
 	return_value[ccs[index]].param = 'encoder-group4';
@@ -612,7 +615,7 @@ BCR.build_control_layout = function()
     //group 1
     ccs = [33, 34, 35, 36, 37, 38, 39, 40];
     for(var index = 0; index < ccs.length; index++){
-	return_value[ccs[index]] = new BC.Encoder(BC.MIDI_MAX, 0, ccs[index], 0);
+	return_value[ccs[index]] = new BC.Encoder(BC.MIDI_MAX, 0, ccs[index], -1);
 	return_value[ccs[index]].track_index = index;
 	return_value[ccs[index]].param = 'button-group1';
 	return_value[ccs[index]].callback = {'cb'  : x,
@@ -622,7 +625,7 @@ BCR.build_control_layout = function()
     //group 2
     ccs = [41, 42, 43, 44, 45, 46, 47, 48];
     for(var index = 0; index < ccs.length; index++){
-	return_value[ccs[index]] = new BC.Encoder(BC.MIDI_MAX, 0, ccs[index], 0);
+	return_value[ccs[index]] = new BC.Encoder(BC.MIDI_MAX, 0, ccs[index], -1);
 	return_value[ccs[index]].track_index = index;
 	return_value[ccs[index]].param = 'button-group2';
 	return_value[ccs[index]].callback = {'cb'  : x,
@@ -633,7 +636,7 @@ BCR.build_control_layout = function()
     //group 3
     ccs = [49, 50, 51, 52, 53, 54, 55, 56];
     for(var index = 0; index < ccs.length; index++){
-	return_value[ccs[index]] = new BC.Encoder(BC.MIDI_MAX, 0, ccs[index], 0);
+	return_value[ccs[index]] = new BC.Encoder(BC.MIDI_MAX, 0, ccs[index], -1);
 	return_value[ccs[index]].track_index = index;
 	return_value[ccs[index]].param = 'button-group3';
 	return_value[ccs[index]].callback = {'cb'  : x,
@@ -643,7 +646,7 @@ BCR.build_control_layout = function()
     //group 4
     ccs = [57, 58, 59, 60, 61, 62, 63, 64];
     for(var index = 0; index < ccs.length; index++){
-	return_value[ccs[index]] = new BC.Encoder(BC.MIDI_MAX, 0, ccs[index], 0);
+	return_value[ccs[index]] = new BC.Encoder(BC.MIDI_MAX, 0, ccs[index], -1);
 	return_value[ccs[index]].track_index = index;
 	return_value[ccs[index]].param = 'button-group4';
 	return_value[ccs[index]].callback = {'cb'  : x,
@@ -654,7 +657,7 @@ BCR.build_control_layout = function()
     ccs = [105, 106, 107, 108]
 
     for(var index = 0; index < ccs.length; index++){
-	return_value[ccs[index]] = new BC.Encoder(BC.MIDI_MAX, 0, ccs[index], 0);
+	return_value[ccs[index]] = new BC.Encoder(BC.MIDI_MAX, 0, ccs[index], -1);
 	
 	if(index === 0)
 	{
@@ -673,6 +676,8 @@ BCR.build_control_layout = function()
 		    var data2 = BC.MIDI_OFF;
 		    //need to make sure we update the parameter with the most recent value so we don't get parameter jumping
 		}
+
+		control.value = data2;
 		
 		this.send_midi(status,
 			       data1,
@@ -700,6 +705,8 @@ BCR.build_control_layout = function()
 		    var data2 = BC.MIDI_OFF;
 		    //need to make sure we update the parameter with the most recent value so we don't get parameter jumping
 		}
+
+		control.value = data2;
 			
 		this.send_midi(status,
 			       data1,
@@ -728,6 +735,8 @@ BCR.build_control_layout = function()
 		    var data2 = BC.MIDI_OFF;
 		    //need to make sure we update the parameter with the most recent value so we don't get parameter jumping
 		}
+
+		control.value = data2;
 		
 		this.send_midi(status,
 			       data1,
@@ -774,6 +783,8 @@ BCR.bind_observers = function()
 	    var data1  = control.control;
 	    var data2  = (value - this.options.bpm_low) / (this.options.bpm_high - this.options.bpm_low) * 128
 	    
+	    control.value = data2;
+
 	    this.send_midi(status,
 			   data1,
 			   data2);
@@ -803,6 +814,8 @@ BCR.bind_observers = function()
 	    var data1  = control.control;
 	    var data2  = value;
 
+	    control.value = data2;
+
 	    this.send_midi(status,
 			   data1,
 			   data2);
@@ -829,6 +842,8 @@ BCR.bind_observers = function()
 	    var status = 0xB0 + this.channel;
 	    var data1  = control.control;
 	    var data2  = value;
+
+	    control.value = data2;
 
 	    this.send_midi(status,
 			   data1,
