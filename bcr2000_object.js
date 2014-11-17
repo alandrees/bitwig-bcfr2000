@@ -1,9 +1,9 @@
 /**
  * Copyright 2014 Alan Drees
- *   
+ *
  * Purpose:
  *  Defines the BCR2000 controller object used to handle the BCR2000 aspect of the BCFR2000
- * 
+ *
  * Dependencies
  *  bc_controls.js
  *  bcfr2000_options.js
@@ -91,7 +91,7 @@ BCR.BCR2000Controller.prototype.init = function(io_controller, banks)
     this.track_offset = track_offset;
 
     this.io_controller = io_controller;
- 
+
     this.banks = banks;
 
     //setup observers
@@ -156,8 +156,8 @@ BCR.BCR2000Controller.prototype.onMidi = function(status, data1, data2)
 		       'data1'  : data1,
 		       'data2'  : data2};
 
-	    callback.cb.call(callback.obj, 
-			     msg, 
+	    callback.cb.call(callback.obj,
+			     msg,
 			     this.controls[data1]);
 	}
     }
@@ -198,7 +198,7 @@ BCR.BCR2000Controller.prototype.set_options = function(options)
  *
  * Builds a quick and easy referential list to do control lookups going index -> controller
  * Offers a shortcut to setting properties via the index
- * 
+ *
  * @param None
  *
  * @returns None
@@ -220,7 +220,7 @@ BCR.BCR2000Controller.prototype.build_indexed_controls = function()
 		channel_object[this.controls[control].track_index] = {};
 		channel_object.length++;
 	    }
-	    
+
 	    channel_object[this.controls[control].track_index][control] = this.controls[control];
 	}
 	else
@@ -229,7 +229,7 @@ BCR.BCR2000Controller.prototype.build_indexed_controls = function()
 	    {
 		channel_object[-1] = {};
 	    }
-	    
+
 	    channel_object[-1][control] = this.controls[control];
 	}
     }
@@ -282,7 +282,7 @@ BCR.BCR2000Controller.prototype.calc_preset_switch = function(preset)
 
 /**\fn BCR.BCR2000Controller.prototype.switch_preset
  *
- * Stores the current preset values, 
+ * Stores the current preset values,
  *
  * @param switcherator switching iterator calculated by calc_preset_switch
  *
@@ -300,7 +300,7 @@ BCR.BCR2000Controller.prototype.switch_preset = function(switcherator)
 	    {
 		this.banks.cursortrack.getPrimaryDevice().switchToNextPreset();
 		this.current_preset++;
-	    }    
+	    }
 	}
 	else if(switcherator < 0)
 	{
@@ -312,7 +312,7 @@ BCR.BCR2000Controller.prototype.switch_preset = function(switcherator)
 	}
 
 	console.log(this.current_preset);
-    
+
 	var device = this.banks.cursortrack.getPrimaryDevice();
 
 	for(var i = 0; i < this.parameter_values[this.current_preset].length; i++)
@@ -327,7 +327,7 @@ BCR.BCR2000Controller.prototype.switch_preset = function(switcherator)
 /**\fn BCR.build_control_layout
  *
  * Non-method function to handle building the controller layout
- * **WILL BE CALLED WITH .call() and passed a this pointer to 
+ * **WILL BE CALLED WITH .call() and passed a this pointer to
  *   the object to generate the control layout for**
  *
  *
@@ -391,7 +391,7 @@ BCR.build_control_layout = function()
 	    var value = midi.data2;
 
 	    control.value = value;
-	    
+
 	    this.banks.master_track.getVolume().set(value, 128);
 	}
     }
@@ -451,7 +451,7 @@ BCR.build_control_layout = function()
 	}
     }
 
-    
+
     //bottom row
     ccs = [97, 98, 99, 100, 101, 102, 103, 104];
     for(var index = 0; index < ccs.length; index++){
@@ -479,7 +479,7 @@ BCR.build_control_layout = function()
 
     //top row
 
-    ccs = [65, 66, 67, 68, 69, 70, 71, 72];  
+    ccs = [65, 66, 67, 68, 69, 70, 71, 72];
     for(var index = 0; index < ccs.length; index++){
 	return_value[ccs[index]] = new BC.Button(BC.MIDI_MAX, 0, ccs[index], -1);
 	return_value[ccs[index]].track_index = index;
@@ -489,7 +489,7 @@ BCR.build_control_layout = function()
 	{
 	    return_value[ccs[index]].callback = {'cb'  : function(midi, control){ this.banks.cursordevice.previousParameterPage(); },
 						 'obj' : this};
- 	}
+	}
 	else if ( index === 1)
 	{
 	    return_value[ccs[index]].callback = {'cb'  : function(midi, control){ this.banks.cursordevice.nextParameterPage(); },
@@ -528,9 +528,9 @@ BCR.build_control_layout = function()
     x = function(midi, control)
     {
 	//the macro encoders are incomplete as there is no way for pages to go down the fx chain
-	
+
 	var value = midi.data2;
-	
+
 	var index = control.track_index;
 	var device = this.banks.cursortrack.getPrimaryDevice();
 	var macro = device.getMacro(index);
@@ -592,7 +592,7 @@ BCR.build_control_layout = function()
 
     //group 3
     ccs = [17, 18, 19, 20, 21, 22, 23, 24];
-    
+
     for(var index = 0; index < ccs.length; index++){
 	return_value[ccs[index]] = new BC.Encoder(BC.MIDI_MAX, 0, ccs[index], -1);
 	return_value[ccs[index]].track_index = index;
@@ -662,7 +662,7 @@ BCR.build_control_layout = function()
 
     for(var index = 0; index < ccs.length; index++){
 	return_value[ccs[index]] = new BC.Encoder(BC.MIDI_MAX, 0, ccs[index], -1);
-	
+
 	if(index === 0)
 	{
 	    var tempolock = function(midi, control)
@@ -670,7 +670,7 @@ BCR.build_control_layout = function()
 		this.tempo_lock = !this.tempo_lock;
 		var status = 0xB0 + this.channel;
 		var data1 = control.control;
-		
+
 		if(this.tempo_lock === true)
 		{
 		    var data2 = BC.MIDI_ON;
@@ -682,16 +682,16 @@ BCR.build_control_layout = function()
 		}
 
 		control.value = data2;
-		
+
 		this.send_midi(status,
 			       data1,
-			       data2);			   
+			       data2);
 	    }
 
 	    return_value[ccs[index]].callback = {'cb'  : tempolock,
 						 'obj' : this};
 	}
-	
+
 	if(index === 1)
 	{
 	    var transportlock = function(midi, control)
@@ -699,7 +699,7 @@ BCR.build_control_layout = function()
 		this.transport_lock = !this.transport_lock;
 		var status = 0xB0 + this.channel;
 		var data1 = control.control;
-		
+
 		if(this.transport_lock === true)
 		{
 		    var data2 = BC.MIDI_ON;
@@ -711,17 +711,17 @@ BCR.build_control_layout = function()
 		}
 
 		control.value = data2;
-			
+
 		this.send_midi(status,
 			       data1,
-			       data2);			   
+			       data2);
 	    }
 
 
 	    return_value[ccs[index]].callback = {'cb'  : transportlock,
 						 'obj' : this};
 	}
-	
+
 	if(index === 2)
 	{
 	    var mastervolumelock = function(midi, control)
@@ -729,7 +729,7 @@ BCR.build_control_layout = function()
 		this.master_volume_lock = !this.master_volume_lock;
 		var status = 0xB0 + this.channel;
 		var data1 = control.control;
-		
+
 		if(this.master_volume_lock === true)
 		{
 		    var data2 = BC.MIDI_ON;
@@ -741,10 +741,10 @@ BCR.build_control_layout = function()
 		}
 
 		control.value = data2;
-		
+
 		this.send_midi(status,
 			       data1,
-			       data2);			   
+			       data2);
 	    }
 
 	    return_value[ccs[index]].callback = {'cb'  : mastervolumelock,
@@ -786,7 +786,7 @@ BCR.bind_observers = function()
 	    var status = 0xB0 + this.channel;
 	    var data1  = control.control;
 	    var data2  = (value - this.options.bpm_low) / (this.options.bpm_high - this.options.bpm_low) * 128
-	    
+
 	    control.value = data2;
 
 	    this.send_midi(status,
@@ -813,7 +813,7 @@ BCR.bind_observers = function()
 	for(var i = 0; i < controllist.length; i++)
 	{
 	    var control = controllist[i];
-	    
+
 	    var status = 0xB0 + this.channel;
 	    var data1  = control.control;
 	    var data2  = value;
@@ -828,7 +828,7 @@ BCR.bind_observers = function()
 
     this.output_callbacks.param_func = function(value, index)
     {
-	
+
     }
 
     this.output_callbacks.page_change_func = function(pagename)
@@ -888,7 +888,7 @@ BCR.bind_observers = function()
 							  }
 						      }).call(this,
 							      function(v){ self.output_callbacks.tempofunc.call(self, v); }));
-    
+
     //master volume update
     this.banks.master_track.getVolume().addValueObserver(BC.MIDI_MAX,
 							 (function(cb)
@@ -926,7 +926,7 @@ BCR.bind_observers = function()
 
 
     //tracks updates in the selected device paramters
-    
+
     //tracks updates in the macro knobs
 
-}    
+}
