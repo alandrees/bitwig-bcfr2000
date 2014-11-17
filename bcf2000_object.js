@@ -1,9 +1,9 @@
 /**
  * Copyright 2014 Alan Drees
- *   
+ *
  * Purpose:
  *  Defines the BCF2000 controller object
- * 
+ *
  * Dependencies
  *  bc_controls.js
  *  bcfr2000_options.js
@@ -59,7 +59,7 @@ BCF.BCF2000Controller = function(options, instance, control_builder, channel, mi
 BCF.BCF2000Controller.prototype.init = function(io_controller, banks)
 {
     this.io_controller = io_controller;
- 
+
     this.banks = banks;
 
     //setup observers
@@ -79,7 +79,7 @@ BCF.BCF2000Controller.prototype.init = function(io_controller, banks)
 
 BCF.BCF2000Controller.prototype.exit = function()
 {
-    
+
 }
 
 /**\fn BCF.BCF2000Controller.prototype.flush
@@ -119,8 +119,8 @@ BCF.BCF2000Controller.prototype.onMidi = function(status, data1, data2)
 		       'data1'  : data1,
 		       'data2'  : data2};
 
-	    callback.cb.call(callback.obj, 
-			     msg, 
+	    callback.cb.call(callback.obj,
+			     msg,
 			     this.controls[data1]);
 	}
     }
@@ -159,7 +159,7 @@ BCF.BCF2000Controller.prototype.set_options = function(options)
  *
  * Builds a quick and easy referential list to do control lookups going index -> controller
  * Offers a shortcut to setting properties via the index
- * 
+ *
  * @param None
  *
  * @returns None
@@ -181,7 +181,7 @@ BCF.BCF2000Controller.prototype.build_indexed_controls = function()
 		channel_object[this.controls[control].track_index] = {};
 		channel_object.length++;
 	    }
-	    
+
 	    channel_object[this.controls[control].track_index][control] = this.controls[control];
 	}
 	else
@@ -190,7 +190,7 @@ BCF.BCF2000Controller.prototype.build_indexed_controls = function()
 	    {
 		channel_object[-1] = {};
 	    }
-	    
+
 	    channel_object[-1][control] = this.controls[control];
 	}
     }
@@ -266,11 +266,11 @@ BCF.bind_observers = function()
 		this.send_midi(status,
 			       data1,
 			       data2);
-			       
+
 	    }
 	}
     }
-	    
+
     this.output_callbacks.sendfunc = function(value, index, sendid)
     {
 	if(this.enable_output)
@@ -339,7 +339,7 @@ BCF.bind_observers = function()
 			       data1,
 			       data2);
 	    }
-	}	
+	}
     }
 
     this.output_callbacks.solofunc = function(value, index)
@@ -425,9 +425,9 @@ BCF.bind_observers = function()
 	    }
 	}
     }
-    
+
     var tracks = [];
-    
+
     for(var index = 0; index < this.indexed_controls.length; index++)
     {
 	tracks[index] = this.banks.trackbank.getTrack(index);
@@ -440,7 +440,7 @@ BCF.bind_observers = function()
 					       {
 						   cb(value, index);
 					       }
-					   }).call(this, 
+					   }).call(this,
 						   function(v, n){ self.output_callbacks.volumefunc.call(self, v, n); }, 
 						   index));
 
@@ -455,7 +455,7 @@ BCF.bind_observers = function()
 								    {
 									cb(value, index, sendid);
 								    }
-								}).call(this, 
+								}).call(this,
 									function(v, n, s){ self.output_callbacks.sendfunc.call(self, v, n, s); }, 
 									index,
 									send_index));
@@ -469,7 +469,7 @@ BCF.bind_observers = function()
 						     {
 							 cb(value, index);
 						     }
-						 }).call(this, 
+						 }).call(this,
 							 function(v, n){ self.output_callbacks.panfunc.call(self, v, n); }, 
 							 index));
 
@@ -480,10 +480,10 @@ BCF.bind_observers = function()
 						     {
 							 cb(value, index);
 						     }
-						 }).call(this, 
+						 }).call(this,
 							 function(v, n){ self.output_callbacks.solofunc.call(self, v, n); }, 
 							 index));
-		
+
 	//arm observer
 	tracks[index].getArm().addValueObserver((function(cb, index)
 						 {
@@ -491,7 +491,7 @@ BCF.bind_observers = function()
 						     {
 							 cb(value, index);
 						     }
-						 }).call(this, 
+						 }).call(this,
 							 function(v, n){ self.output_callbacks.armfunc.call(self, v, n); }, 
 							 index));
 	//mute observer
@@ -501,19 +501,19 @@ BCF.bind_observers = function()
 						     {
 							 cb(value, index);
 						     }
-						 }).call(this, 
+						 }).call(this,
 							 function(v, n){ self.output_callbacks.mutefunc.call(self, v, n); }, 
 							 index));
     }
 
-}    
+}
 
 
 
 /**\fn BCF.build_control_layout
  *
  * Non-method function to handle building the controller layout
- * **WILL BE CALLED WITH .call() and passed a this pointer to 
+ * **WILL BE CALLED WITH .call() and passed a this pointer to
  *   the object to generate the control layout for**
  *
  * @param None
@@ -530,7 +530,7 @@ BCF.build_control_layout = function()
 
     //first build a list of faders
     ccs = [32, 33, 34, 35, 36, 37, 38, 39];
-	
+
     x = function(midi, control)
     {
 	var value = midi.data2;
@@ -561,7 +561,7 @@ BCF.build_control_layout = function()
     x = function(midi, control)
     {
 	var value = midi.data2;
-	
+
 	var track = this.banks.trackbank.getTrack(control.track_index)
 
 	control.value = value;
@@ -584,11 +584,11 @@ BCF.build_control_layout = function()
 
     //mute buttons
     ccs = [48, 49, 50, 51, 52, 53, 54, 55];
-	
+
     x = function(midi, control)
     {
 	var value = midi.data2;
-	
+
 	var track = this.banks.trackbank.getTrack(control.track_index)
 
 	control.value = value;
@@ -623,7 +623,7 @@ BCF.build_control_layout = function()
 	{
 	    track.getPan().set(value, BC.MIDI_MAX);
 	}
-	
+
     }
 
     for(var index = 0; index < ccs.length; index++){
@@ -641,7 +641,7 @@ BCF.build_control_layout = function()
     x = function(midi, control)
     {
 	var value = midi.data2;
-	
+
 	var track = this.banks.trackbank.getTrack(control.track_index)
 
 	control.value = value;
@@ -666,7 +666,7 @@ BCF.build_control_layout = function()
     x = function(midi, control)
     {
 	var value = midi.data2;
-	
+
 	var track = this.banks.trackbank.getTrack(control.track_index)
 
 	control.value = value;
@@ -676,7 +676,7 @@ BCF.build_control_layout = function()
 	    track.getSend(1).set(value, BC.MIDI_MAX);
 	}
     }
-    
+
     for(var index = 0; index < ccs.length; index++){
 	return_value[ccs[index]] = new BC.Encoder(BC.MIDI_MAX, 0, ccs[index], -1);
 	return_value[ccs[index]].track_index = index;
@@ -691,7 +691,7 @@ BCF.build_control_layout = function()
     x = function(midi, control)
     {
 	var value = midi.data2;
-	
+
 	var track = this.banks.trackbank.getTrack(control.track_index)
 
 	control.value = value;
@@ -712,16 +712,16 @@ BCF.build_control_layout = function()
 
     //the 32 grouped buttons
     //only 8 different ccs's used for the BCF layout
-    
+
     //solo
     ccs = [56,  57,  58,  59,  60,  61,  62, 63];
 
     x = function(midi, control)
     {
 	var value = midi.data2;
-	
+
 	var track = this.banks.trackbank.getTrack(control.track_index)
-	
+
 	control.value = value;
 
 	if(typeof track !== 'null')
@@ -739,16 +739,16 @@ BCF.build_control_layout = function()
     }
 
     //User buttons
-   
+
     ccs = [89, 90, 91, 92]
 
     var banking = function(midi, control)
     {
 	if(control.control == 89)
 	{
-	    if(midi.data2 == 127) 
+	    if(midi.data2 == 127)
 	    {
-		this.track_offset = 0; 
+		this.track_offset = 0;
 
 		var status = 0xB0 + this.channel;
 
@@ -766,9 +766,9 @@ BCF.build_control_layout = function()
 	}
 	else if(control.control == 90)
 	{
-	    if(midi.data2 == 127) 
+	    if(midi.data2 == 127)
 	    {
-		this.track_offset = 8; 
+		this.track_offset = 8;
 
 		var status = 0xB0 + this.channel;
 
@@ -787,19 +787,19 @@ BCF.build_control_layout = function()
 
     for(var index = 0; index < ccs.length; index++){
 	return_value[ccs[index]] = new BC.Encoder(BC.MIDI_MAX, 0, ccs[index], -1);
-	
+
 	if(index === 0)
 	{
 	    return_value[ccs[index]].callback = {'cb'   : banking,
 						 'obj' : this};
 	}
-	
+
 	if(index === 1)
 	{
 	    return_value[ccs[index]].callback = {'cb'   : banking,
 						 'obj' : this};
 	}
-	
+
 	if(index === 2)
 	{
 	    return_value[ccs[index]].callback = {'cb'   : function(midi, control){},
