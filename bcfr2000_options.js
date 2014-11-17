@@ -1,6 +1,6 @@
 /**
  * Copyright 2014 Alan Drees
- *   
+ *
  * Purpose:
  *  Implements configuraable options for each of the component modules of the design
  * Dependencies
@@ -20,7 +20,7 @@ var BCF = BCF || {};
  * @returns None
  */
 
-BCFR2000.options = {'bcfs'          : 1, 
+BCFR2000.options = {'bcfs'          : 1,
 		    'bcrs'          : 1,
 		    'io'            : 'bcr',
 		    'discoveryname' : [["BCF2000", "BCF2000"]],

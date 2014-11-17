@@ -1,9 +1,9 @@
 /**
  * Copyright 2014 Alan Drees
- *   
+ *
  * Purpose:
  *  Defines the encapsulating BCFR2000 controller
- * 
+ *
  * Dependencies
  *  bcr2000_object.js
  *  bcf2000_object.js
@@ -40,7 +40,7 @@ BCFR2000.BCFRController = function(options, instance, midi_instance)
 
     this.set_options(options);
     this.instance = instance;
-    
+
     this.midi_instance = midi_instance;
 
     this.bcr = new Array();
@@ -60,7 +60,7 @@ BCFR2000.BCFRController = function(options, instance, midi_instance)
 
 /**\fn BCFR2000.BCFR2000Controller.prototype.init
  *
- * Init function to be called to initalize the 
+ * Init function to be called to initalize the
  *
  * @param banks banks object passed from an encapsulating controller
  *
@@ -120,7 +120,7 @@ BCFR2000.BCFRController.prototype.init = function(banks)
 
 /**\fn BCFR2000.BCFR2000Controller.prototype.exit
  *
- * Exit function to be called when the exit event is fired 
+ * Exit function to be called when the exit event is fired
  *
  * @param None
  *
@@ -208,7 +208,7 @@ BCFR2000.BCFRController.prototype.onMidi = function(status, data1, data2)
 
 BCFR2000.BCFRController.prototype.set_options = function(options)
 {
-    this.options = {'bcfs'          : 1, 
+    this.options = {'bcfs'          : 1,
 		    'bcrs'          : 1,
 		    'io'            : 'bcr',
 		   };

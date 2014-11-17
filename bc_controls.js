@@ -1,8 +1,8 @@
 /**
  * Copyright 2014 Alan Drees
- *   
+ *
  * Purpose:
- *  Implements controls used by the BCF/BCR2000   
+ *  Implements controls used by the BCF/BCR2000
  *
  * Dependencies
  *
@@ -111,7 +111,7 @@ BC.Control.prototype.value_out = function(value)
 BC.Encoder = function(max, min, control, init_value)
 {
     if(typeof init_value === 'undefined') init_value = 0;
-    
+
     BC.Control.apply(this,[max, min, control, init_value]);
 }
 
@@ -135,7 +135,7 @@ BC.Encoder.prototype.constructor = BC.Encoder;
 
 BC.Button = function(param, max, min, init_value)
 {
-    if(typeof init_value === 'undefined') init_value = 0;  
+    if(typeof init_value === 'undefined') init_value = 0;
 
     BC.Control.apply(this,[param, max, min, init_value]);
 }
@@ -156,7 +156,7 @@ BC.Button.prototype.constructor = BC.Button;
 BC.Fader = function(param, max, min, init_value)
 {
     if(typeof init_value === 'undefined') init_value = 0;
-    
+
     BC.Control.apply(this,[param, max, min, init_value]);
 }
 
