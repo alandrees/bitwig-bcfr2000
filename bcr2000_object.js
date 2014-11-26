@@ -797,6 +797,8 @@ BCR.bind_observers = function()
 	    this.send_midi(status,
 			   data1,
 			   data2);
+
+	    this.tempo = data2;
 	}
     }
 
