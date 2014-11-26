@@ -785,6 +785,9 @@ BCR.bind_observers = function()
 
 	    var control = this.controls[88];
 
+	    value = Math.min(value - 56, 127);
+	    value = Math.max(value, 0);
+
 	    var status = 0xB0 + this.channel;
 	    var data1  = control.control;
 	    var data2  = (value - this.options.bpm_low) / (this.options.bpm_high - this.options.bpm_low) * 128
