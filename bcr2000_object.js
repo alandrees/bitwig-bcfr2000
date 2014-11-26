@@ -687,6 +687,11 @@ BCR.build_control_layout = function()
 		this.send_midi(status,
 			       data1,
 			       data2);
+
+		this.send_midi(status,
+			       88,
+			       Math.min(this.tempo, 127));
+
 	    }
 
 	    return_value[ccs[index]].callback = {'cb'  : tempolock,
