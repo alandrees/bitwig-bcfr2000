@@ -673,11 +673,11 @@ BCR.build_control_layout = function()
 
 		if(this.tempo_lock === true)
 		{
-		    var data2 = BC.MIDI_ON;
+		    var data2 = BC.MIDI_OFF;
 		}
 		else
 		{
-		    var data2 = BC.MIDI_OFF;
+		    var data2 = BC.MIDI_ON;
 		    //need to make sure we update the parameter with the most recent value so we don't get parameter jumping
 		}
 
