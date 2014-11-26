@@ -673,19 +673,25 @@ BCR.build_control_layout = function()
 
 		if(this.tempo_lock === true)
 		{
-		    var data2 = BC.MIDI_ON;
+		    var data2 = BC.MIDI_OFF;
 		}
 		else
 		{
-		    var data2 = BC.MIDI_OFF;
+		    var data2 = BC.MIDI_ON;
 		    //need to make sure we update the parameter with the most recent value so we don't get parameter jumping
 		}
 
 		control.value = data2;
 
+
 		this.send_midi(status,
 			       data1,
 			       data2);
+
+		this.send_midi(status,
+			       88,
+			       Math.min(this.tempo, 127));
+
 	    }
 
 	    return_value[ccs[index]].callback = {'cb'  : tempolock,
@@ -781,17 +787,23 @@ BCR.bind_observers = function()
     {
 	if(this.enable_output)
 	{
+
 	    var control = this.controls[88];
+
+	    value = Math.min(value - 56, 127);
+	    value = Math.max(value, 0);
 
 	    var status = 0xB0 + this.channel;
 	    var data1  = control.control;
-	    var data2  = (value - this.options.bpm_low) / (this.options.bpm_high - this.options.bpm_low) * 128
+	    data2 = value;
 
 	    control.value = data2;
 
 	    this.send_midi(status,
 			   data1,
 			   data2);
+
+	    this.tempo = data2;
 	}
     }
 
@@ -874,7 +886,7 @@ BCR.bind_observers = function()
 										  cb(value, index);
 									      }
 									  }).call(this,
-										  function(v, i){ self.output_callbacks.macro_func.call(self, v, i); }, 
+										  function(v, i){ self.output_callbacks.macro_func.call(self, v, i); },
 										  i));
     }
 
@@ -919,7 +931,7 @@ BCR.bind_observers = function()
 													cb(value, index);
 												    }
 												}).call(this, 
-													function(v, n){ macrofunc.call(self, v, n); }, 
+													function(v, n){ macrofunc.call(self, v, n); },
 													i));
 	}
     }
