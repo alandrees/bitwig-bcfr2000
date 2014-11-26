@@ -683,6 +683,7 @@ BCR.build_control_layout = function()
 
 		control.value = data2;
 
+
 		this.send_midi(status,
 			       data1,
 			       data2);
@@ -781,6 +782,7 @@ BCR.bind_observers = function()
     {
 	if(this.enable_output)
 	{
+
 	    var control = this.controls[88];
 
 	    var status = 0xB0 + this.channel;
@@ -874,7 +876,7 @@ BCR.bind_observers = function()
 										  cb(value, index);
 									      }
 									  }).call(this,
-										  function(v, i){ self.output_callbacks.macro_func.call(self, v, i); }, 
+										  function(v, i){ self.output_callbacks.macro_func.call(self, v, i); },
 										  i));
     }
 
@@ -919,7 +921,7 @@ BCR.bind_observers = function()
 													cb(value, index);
 												    }
 												}).call(this, 
-													function(v, n){ macrofunc.call(self, v, n); }, 
+													function(v, n){ macrofunc.call(self, v, n); },
 													i));
 	}
     }
