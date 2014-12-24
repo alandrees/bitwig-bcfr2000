@@ -375,16 +375,6 @@ BCR.build_control_layout = function()
 
     }
 
-    var tempo_controller = function(midi, control)
-    {
-	if(!this.tempo_lock)
-	{
-	    var value = (midi.data2 / BC.MIDI_MAX) * (this.options.bpm_high - this.options.bpm_low) + this.options.bpm_low - 20;
-	    control.value = value;
-	    this.banks.transport.getTempo().set(Math.round(value), 647);
-	}
-    }
-
     var master_volume = function(midi, control)
     {
 	if(!this.master_volume_lock)
