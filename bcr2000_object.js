@@ -846,7 +846,7 @@ BCR.bind_observers = function()
     }
 
     //track changes in the tempo
-    this.banks.transport.getTempo().addValueObserver(666,
+    this.banks.transport.getTempo().addValueObserver(647,
 						     (function(cb)
 						      {
 							  return function(value)
