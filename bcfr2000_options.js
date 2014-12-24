@@ -63,6 +63,6 @@ BCR.options = {'channel'                 : 2,
 	       'sends'                   : BCFR2000.options.sends  || 3,
 	       'scenes'                  : BCFR2000.options.scenes || 0,
 	       'enable_preset_switching' : false,
-	       'bpm_low'  : 75,
-	       'bpm_high' : 200};
+	       'bpm_low'                 : 75,
+	       'bpm_high'                : 200,
 
