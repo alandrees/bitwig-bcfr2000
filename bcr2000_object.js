@@ -401,12 +401,6 @@ BCR.build_control_layout = function()
 	    return_value[ccs[index]].callback = {'cb'  : param_encoders,
 						 'obj' : this};
 	}
-	else if(index === 7)
-	{
-	    return_value[ccs[index]].param = 'encoder-tempo';
-	    return_value[ccs[index]].callback = {'cb'  : tempo_controller,
-						 'obj' : this};
-	}
 	else
 	{
 	    return_value[ccs[index]].param = 'encoder-top';
