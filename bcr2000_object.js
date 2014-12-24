@@ -693,7 +693,7 @@ BCR.build_control_layout = function()
 			}
 		    }
 
-		    this.banks.transport.getTempo().set(this.current_tempo, 647);
+		    this.banks.transport.getTempo().set(this.current_tempo - 20, 647);
 		}
 	    }
 
