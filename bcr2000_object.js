@@ -674,7 +674,31 @@ BCR.build_control_layout = function()
 
 	if(index === 1)
 	{
-	    //placeholder until the increment/decrement buttons are implemented in software
+	    var tempoincrement = function(midi, control)
+	    {
+		if(this.tempo_lock === true && this.current_tempo !== null)
+		{
+		    if(midi.data2 === 1)
+		    {
+			if(!(this.current_tempo + this.options.bpm_increment) >= this.options.bpm_high)
+			{
+			    this.current_tempo += this.options.bpm_increment;
+			}
+		    }
+		    elseif(midi.data2 === 0)
+		    {
+			if(!(this.current_tempo + this.options.bpm_decrement) <= this.options.bpm_low)
+			{
+			    this.current_tempo += this.options.bpm_decrement;
+			}
+		    }
+
+		    this.banks.transport.getTempo().set(this.current_tempo, 647);
+		}
+	    }
+
+	    return_value[ccs[index]].callback = {'cb'  : tempoincrement,
+						 'obj' : this};
 	}
 
 	if(index === 2)
