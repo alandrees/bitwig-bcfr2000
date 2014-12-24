@@ -687,7 +687,7 @@ BCR.build_control_layout = function()
 		    }
 		    else if(midi.data2 === 0)
 		    {
-			if(!(this.current_tempo + this.options.bpm_decrement) <= this.options.bpm_low)
+			if((this.current_tempo + this.options.bpm_decrement) >= this.options.bpm_low)
 			{
 			    this.current_tempo += this.options.bpm_decrement;
 			}
