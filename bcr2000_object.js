@@ -734,6 +734,7 @@ BCR.build_control_layout = function()
 
 	if(index === 3)
 	{
+	    //placeholder until the tempo increment/decrement buttons are implemented in software
 	    return_value[ccs[index]].callback = {'cb'  : function(midi, control){},
 						 'obj' : this};
 	}
