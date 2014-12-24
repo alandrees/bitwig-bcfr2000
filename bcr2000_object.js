@@ -689,7 +689,7 @@ BCR.build_control_layout = function()
 		    {
 			if((this.current_tempo + this.options.bpm_decrement) >= this.options.bpm_low)
 			{
-			    this.current_tempo += this.options.bpm_decrement;
+			    this.current_tempo -= this.options.bpm_decrement;
 			}
 		    }
 
