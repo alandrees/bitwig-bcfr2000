@@ -65,4 +65,6 @@ BCR.options = {'channel'                 : 2,
 	       'enable_preset_switching' : false,
 	       'bpm_low'                 : 75,
 	       'bpm_high'                : 200,
+	       'bpm_increment'           : 1,
+	       'bpm_decrement'           : 1};
 
