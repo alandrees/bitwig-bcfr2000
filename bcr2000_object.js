@@ -643,7 +643,7 @@ BCR.build_control_layout = function()
     }
 
     //User buttons
-    ccs = [105, 106, 107, 108]
+    ccs = [105, 106, 107]
 
     for(var index = 0; index < ccs.length; index++){
 	return_value[ccs[index]] = new BC.Encoder(BC.MIDI_MAX, 0, ccs[index], -1);
@@ -663,20 +663,9 @@ BCR.build_control_layout = function()
 		else
 		{
 		    var data2 = BC.MIDI_ON;
-		    //need to make sure we update the parameter with the most recent value so we don't get parameter jumping
 		}
 
 		control.value = data2;
-
-
-		this.send_midi(status,
-			       data1,
-			       data2);
-
-		this.send_midi(status,
-			       88,
-			       Math.min(this.tempo, 127));
-
 	    }
 
 	    return_value[ccs[index]].callback = {'cb'  : tempolock,
