@@ -759,7 +759,7 @@ BCR.bind_observers = function()
 
     this.output_callbacks.tempofunc = function(value)
     {
-	this.tempo = value;
+	this.current_tempo = value + 20;
     }
 
     this.output_callbacks.macro_func = function(value, index)
