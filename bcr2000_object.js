@@ -66,6 +66,7 @@ BCR.BCR2000Controller = function(options, instance, control_builder, channel, mi
 
     this.controls = control_builder.call(this);
     this.tempo_lock = true;
+    this.current_tempo = null;
     this.master_volume_lock = true;
     this.transport_lock = true;
 
