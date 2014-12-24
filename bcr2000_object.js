@@ -693,7 +693,7 @@ BCR.build_control_layout = function()
 			}
 		    }
 
-		    this.banks.transport.getTempo().set(this.current_tempo, 647);
+		    this.banks.transport.getTempo().set(this.current_tempo - 20, 647);
 		}
 	    }
 
@@ -759,7 +759,7 @@ BCR.bind_observers = function()
 
     this.output_callbacks.tempofunc = function(value)
     {
-	this.tempo = value;
+	this.current_tempo = value + 20;
     }
 
     this.output_callbacks.macro_func = function(value, index)
