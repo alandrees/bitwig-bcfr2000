@@ -55,17 +55,19 @@ BCF.options = {'channel'    : 1,
  *
  */
 
-BCR.options = {'channel' : 2,
-	       'faders'   : 0,
-	       'encoders' : 24,
-	       'buttons'  : 16,
-	       'gencoder' : 32,
-	       'gbuttons' : 32,
-	       'misc'     : 4,
-	       'tracks'   : BCFR2000.options.tracks || 8,
-	       'sends'    : BCFR2000.options.sends  || 3,
-	       'scenes'   : BCFR2000.options.scenes || 0,
+BCR.options = {'channel'                 : 2,
+	       'faders'                  : 0,
+	       'encoders'                : 24,
+	       'buttons'                 : 16,
+	       'gencoder'                : 32,
+	       'gbuttons'                : 32,
+	       'misc'                    : 4,
+	       'tracks'                  : BCFR2000.options.tracks || 8,
+	       'sends'                   : BCFR2000.options.sends  || 3,
+	       'scenes'                  : BCFR2000.options.scenes || 0,
 	       'enable_preset_switching' : false,
-	       'bpm_low'  : 75,
-	       'bpm_high' : 200};
+	       'bpm_low'                 : 75,
+	       'bpm_high'                : 200,
+	       'bpm_increment'           : 1,
+	       'bpm_decrement'           : 1};
 

@@ -66,6 +66,7 @@ BCR.BCR2000Controller = function(options, instance, control_builder, channel, mi
 
     this.controls = control_builder.call(this);
     this.tempo_lock = true;
+    this.current_tempo = null;
     this.master_volume_lock = true;
     this.transport_lock = true;
 
@@ -374,16 +375,6 @@ BCR.build_control_layout = function()
 
     }
 
-    var tempo_controller = function(midi, control)
-    {
-	if(!this.tempo_lock)
-	{
-	    var value = (midi.data2 / BC.MIDI_MAX) * (this.options.bpm_high - this.options.bpm_low) + this.options.bpm_low - 20;
-	    control.value = value;
-	    this.banks.transport.getTempo().set(Math.round(value), 647);
-	}
-    }
-
     var master_volume = function(midi, control)
     {
 	if(!this.master_volume_lock)
@@ -408,12 +399,6 @@ BCR.build_control_layout = function()
 	    return_value[ccs[index]].param_index = param_index++;
 	    return_value[ccs[index]].param = 'encoder-param';
 	    return_value[ccs[index]].callback = {'cb'  : param_encoders,
-						 'obj' : this};
-	}
-	else if(index === 7)
-	{
-	    return_value[ccs[index]].param = 'encoder-tempo';
-	    return_value[ccs[index]].callback = {'cb'  : tempo_controller,
 						 'obj' : this};
 	}
 	else
@@ -658,7 +643,7 @@ BCR.build_control_layout = function()
     }
 
     //User buttons
-    ccs = [105, 106, 107, 108]
+    ccs = [105, 106, 107]
 
     for(var index = 0; index < ccs.length; index++){
 	return_value[ccs[index]] = new BC.Encoder(BC.MIDI_MAX, 0, ccs[index], -1);
@@ -678,20 +663,9 @@ BCR.build_control_layout = function()
 		else
 		{
 		    var data2 = BC.MIDI_ON;
-		    //need to make sure we update the parameter with the most recent value so we don't get parameter jumping
 		}
 
 		control.value = data2;
-
-
-		this.send_midi(status,
-			       data1,
-			       data2);
-
-		this.send_midi(status,
-			       88,
-			       Math.min(this.tempo, 127));
-
 	    }
 
 	    return_value[ccs[index]].callback = {'cb'  : tempolock,
@@ -700,7 +674,31 @@ BCR.build_control_layout = function()
 
 	if(index === 1)
 	{
-	    //placeholder until the increment/decrement buttons are implemented in software
+	    var tempoincrement = function(midi, control)
+	    {
+		if(this.tempo_lock === true && this.current_tempo !== null)
+		{
+		    if(midi.data2 === 1)
+		    {
+			if(!(this.current_tempo + this.options.bpm_increment) >= this.options.bpm_high)
+			{
+			    this.current_tempo += this.options.bpm_increment;
+			}
+		    }
+		    elseif(midi.data2 === 0)
+		    {
+			if(!(this.current_tempo + this.options.bpm_decrement) <= this.options.bpm_low)
+			{
+			    this.current_tempo += this.options.bpm_decrement;
+			}
+		    }
+
+		    this.banks.transport.getTempo().set(this.current_tempo, 647);
+		}
+	    }
+
+	    return_value[ccs[index]].callback = {'cb'  : tempoincrement,
+						 'obj' : this};
 	}
 
 	if(index === 2)
@@ -761,26 +759,7 @@ BCR.bind_observers = function()
 
     this.output_callbacks.tempofunc = function(value)
     {
-	if(this.enable_output)
-	{
-
-	    var control = this.controls[88];
-
-	    value = Math.min(value - 56, 127);
-	    value = Math.max(value, 0);
-
-	    var status = 0xB0 + this.channel;
-	    var data1  = control.control;
-	    data2 = value;
-
-	    control.value = data2;
-
-	    this.send_midi(status,
-			   data1,
-			   data2);
-
-	    this.tempo = data2;
-	}
+	this.tempo = value;
     }
 
     this.output_callbacks.macro_func = function(value, index)
@@ -867,7 +846,7 @@ BCR.bind_observers = function()
     }
 
     //track changes in the tempo
-    this.banks.transport.getTempo().addValueObserver(666,
+    this.banks.transport.getTempo().addValueObserver(647,
 						     (function(cb)
 						      {
 							  return function(value)
