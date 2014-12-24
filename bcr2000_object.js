@@ -759,26 +759,7 @@ BCR.bind_observers = function()
 
     this.output_callbacks.tempofunc = function(value)
     {
-	if(this.enable_output)
-	{
-
-	    var control = this.controls[88];
-
-	    value = Math.min(value - 56, 127);
-	    value = Math.max(value, 0);
-
-	    var status = 0xB0 + this.channel;
-	    var data1  = control.control;
-	    data2 = value;
-
-	    control.value = data2;
-
-	    this.send_midi(status,
-			   data1,
-			   data2);
-
-	    this.tempo = data2;
-	}
+	this.tempo = value;
     }
 
     this.output_callbacks.macro_func = function(value, index)
