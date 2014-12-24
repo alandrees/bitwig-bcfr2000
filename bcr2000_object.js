@@ -700,32 +700,7 @@ BCR.build_control_layout = function()
 
 	if(index === 1)
 	{
-	    var transportlock = function(midi, control)
-	    {
-		this.transport_lock = !this.transport_lock;
-		var status = 0xB0 + this.channel;
-		var data1 = control.control;
-
-		if(this.transport_lock === true)
-		{
-		    var data2 = BC.MIDI_ON;
-		}
-		else
-		{
-		    var data2 = BC.MIDI_OFF;
-		    //need to make sure we update the parameter with the most recent value so we don't get parameter jumping
-		}
-
-		control.value = data2;
-
-		this.send_midi(status,
-			       data1,
-			       data2);
-	    }
-
-
-	    return_value[ccs[index]].callback = {'cb'  : transportlock,
-						 'obj' : this};
+	    //placeholder until the increment/decrement buttons are implemented in software
 	}
 
 	if(index === 2)
