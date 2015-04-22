@@ -1,5 +1,5 @@
 /**
- * Copyright 2014 Alan Drees
+ * Copyright 2014-2015 Alan Drees
  *
  * Purpose:
  *  Defines the BCF2000 controller object

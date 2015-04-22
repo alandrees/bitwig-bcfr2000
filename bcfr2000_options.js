@@ -1,5 +1,5 @@
 /**
- * Copyright 2014 Alan Drees
+ * Copyright 2014-2015 Alan Drees
  *
  * Purpose:
  *  Implements configuraable options for each of the component modules of the design
