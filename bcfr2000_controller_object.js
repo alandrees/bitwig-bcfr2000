@@ -1,5 +1,5 @@
 /**
- * Copyright 2014 Alan Drees
+ * Copyright 2014-2015 Alan Drees
  *
  * Purpose:
  *  Defines the encapsulating BCFR2000 controller
