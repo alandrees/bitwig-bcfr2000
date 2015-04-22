@@ -1,5 +1,5 @@
 /**
- * Copyright 2014 Alan Drees
+ * Copyright 2014-2015 Alan Drees
  *
  * Purpose:
  *  Defines the BCR2000 controller object used to handle the BCR2000 aspect of the BCFR2000
