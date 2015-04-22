@@ -312,8 +312,6 @@ BCR.BCR2000Controller.prototype.switch_preset = function(switcherator)
 	    }
 	}
 
-	console.log(this.current_preset);
-
 	var device = this.banks.cursortrack.createCursorDevice("Primary");
 
 	for(var i = 0; i < this.parameter_values[this.current_preset].length; i++)
