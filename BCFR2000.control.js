@@ -30,7 +30,7 @@ load('bcf2000_object.js');
 load('bcr2000_object.js');
 load('bc_controls.js');
 
-host.defineController("Stealthascope", "BCFR2000", "0.0", "CA3EEFAF-636D-454F-81A8-E67EAF1B01AE");
+host.defineController("Stealthascope", "BCFR2000", "0.0", "CA3EEFAF-636D-454F-81A8-E67EAF1B01AE", "Alan Drees");
 host.defineMidiPorts(1, 1);
 
 for(var pair_index in BCFR2000.options.discoveryname)
