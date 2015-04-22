@@ -299,7 +299,7 @@ BCR.BCR2000Controller.prototype.switch_preset = function(switcherator)
 	{
 	    for(var i = 1; i < Math.abs(switcherator); i++)
 	    {
-		this.banks.cursortrack.getPrimaryDevice().switchToNextPreset();
+		this.banks.cursortrack.createCursorDevice("Primary").switchToNextPreset();
 		this.current_preset++;
 	    }
 	}
@@ -307,14 +307,12 @@ BCR.BCR2000Controller.prototype.switch_preset = function(switcherator)
 	{
 	    for(var i = 1; i < Math.abs(switcherator); i++)
 	    {
-		this.banks.cursortrack.getPrimaryDevice().switchToPreviousPreset();
+		this.banks.cursortrack.createCursorDevice("Primary").switchToPreviousPreset();
 		this.current_preset--;
 	    }
 	}
 
-	console.log(this.current_preset);
-
-	var device = this.banks.cursortrack.getPrimaryDevice();
+	var device = this.banks.cursortrack.createCursorDevice("Primary");
 
 	for(var i = 0; i < this.parameter_values[this.current_preset].length; i++)
 	{
@@ -517,7 +515,7 @@ BCR.build_control_layout = function()
 	var value = midi.data2;
 
 	var index = control.track_index;
-	var device = this.banks.cursortrack.getPrimaryDevice();
+	var device = this.banks.cursortrack.createCursorDevice("Primary");
 	var macro = device.getMacro(index);
 
 	if(this.options.enable_preset_switching)
@@ -822,15 +820,15 @@ BCR.bind_observers = function()
 	}
     }
 
-    self.banks.cursortrack.getPrimaryDevice().addSelectedPageObserver(0,
-								      (function(cb)
-								       {
-									   return function(name)
-									   {
-									       cb(name);
-									   }
-								       }).call(this,
-									       function(n){ self.output_callbacks.page_change_func(n) }));
+    self.banks.cursortrack.createCursorDevice("Primary").addSelectedPageObserver(0,
+										 (function(cb)
+										  {
+										      return function(name)
+										      {
+											  cb(name);
+										      }
+										  }).call(this,
+											  function(n){ self.output_callbacks.page_change_func(n) }));
     for(var i = 0; i < 8; i++)
     {
 	this.banks.cursordevice.getMacro(i).getAmount().addValueObserver(BC.MIDI_MAX,
@@ -878,16 +876,16 @@ BCR.bind_observers = function()
 
 	for(var i = 0; i < 8; i++)
 	{
-	    self.banks.cursortrack.getPrimaryDevice().getMacro(i).getAmount().addValueObserver(128,
-											       (function(cb, index)
-												{
-												    return function(value)
-												    {
-													cb(value, index);
-												    }
-												}).call(this, 
-													function(v, n){ macrofunc.call(self, v, n); },
-													i));
+	    self.banks.cursortrack.createCursorDevice("Primary").getMacro(i).getAmount().addValueObserver(128,
+													  (function(cb, index)
+													   {
+													       return function(value)
+													       {
+														   cb(value, index);
+													       }
+													   }).call(this,
+														   function(v, n){ macrofunc.call(self, v, n); },
+														   i));
 	}
     }
 

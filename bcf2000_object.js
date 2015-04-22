@@ -430,7 +430,7 @@ BCF.bind_observers = function()
 
     for(var index = 0; index < this.indexed_controls.length; index++)
     {
-	tracks[index] = this.banks.trackbank.getTrack(index);
+	tracks[index] = this.banks.trackbank.getChannel(index);
 
 	//volume observer
 	tracks[index].getVolume().addValueObserver(128,
@@ -535,7 +535,7 @@ BCF.build_control_layout = function()
     {
 	var value = midi.data2;
 
-	var track = this.banks.trackbank.getTrack(control.track_index)
+	var track = this.banks.trackbank.getChannel(control.track_index)
 
 	control.value = value;
 
@@ -562,7 +562,7 @@ BCF.build_control_layout = function()
     {
 	var value = midi.data2;
 
-	var track = this.banks.trackbank.getTrack(control.track_index)
+	var track = this.banks.trackbank.getChannel(control.track_index)
 
 	control.value = value;
 
@@ -589,7 +589,7 @@ BCF.build_control_layout = function()
     {
 	var value = midi.data2;
 
-	var track = this.banks.trackbank.getTrack(control.track_index)
+	var track = this.banks.trackbank.getChannel(control.track_index)
 
 	control.value = value;
 
@@ -615,7 +615,7 @@ BCF.build_control_layout = function()
     {
 	var value = midi.data2;
 
-	var track = this.banks.trackbank.getTrack(control.track_index)
+	var track = this.banks.trackbank.getChannel(control.track_index)
 
 	control.value = value;
 
@@ -642,7 +642,7 @@ BCF.build_control_layout = function()
     {
 	var value = midi.data2;
 
-	var track = this.banks.trackbank.getTrack(control.track_index)
+	var track = this.banks.trackbank.getChannel(control.track_index)
 
 	control.value = value;
 
@@ -667,7 +667,7 @@ BCF.build_control_layout = function()
     {
 	var value = midi.data2;
 
-	var track = this.banks.trackbank.getTrack(control.track_index)
+	var track = this.banks.trackbank.getChannel(control.track_index)
 
 	control.value = value;
 
@@ -692,7 +692,7 @@ BCF.build_control_layout = function()
     {
 	var value = midi.data2;
 
-	var track = this.banks.trackbank.getTrack(control.track_index)
+	var track = this.banks.trackbank.getChannel(control.track_index)
 
 	control.value = value;
 
@@ -720,7 +720,7 @@ BCF.build_control_layout = function()
     {
 	var value = midi.data2;
 
-	var track = this.banks.trackbank.getTrack(control.track_index)
+	var track = this.banks.trackbank.getChannel(control.track_index)
 
 	control.value = value;
 
