@@ -323,6 +323,43 @@ BCR.BCR2000Controller.prototype.switch_preset = function(switcherator)
 }
 
 
+/**\fn BCR.BCR2000Controller.prototype.get_nested_macro_device
+ *
+ * Logic to handle the 4-group nested controller
+ *
+ * @param bank (integer) value in the range of BCR.MACRO_BANK constants
+ *
+ * @returns device to set the macro control on
+ */
+
+BCR.BCR2000Controller.prototype.get_nested_macro_device = function(bank)
+{
+    var root_device = this.banks.cursortrack.createCursorDevice("Primary");
+
+    if(bank === BCR.MACRO_BANK1)
+    {
+	var device = root_device;
+    }
+    else if(bank === BCR.MACRO_BANK2)
+    {
+	var device = root_device.createLayerBank(1).getChannel(0).createDeviceBank(1).getDevice(0);
+    }
+    else if(bank === BCR.MACRO_BANK3)
+    {
+	var device = root_device.createLayerBank(1).getChannel(0).createDeviceBank(1).getDevice(0);
+	device = device.createLayerBank(1).getChannel(0).createDeviceBank(1).getDevice(0);
+    }
+    else if(bank === BCR.MACRO_BANK4)
+    {
+	var device = root_device.createLayerBank(1).getChannel(0).createDeviceBank(1).getDevice(0);
+	device = device.createLayerBank(1).getChannel(0).createDeviceBank(1).getDevice(0);
+	device = device.createLayerBank(1).getChannel(0).createDeviceBank(1).getDevice(0);
+    }
+
+    return device;
+}
+
+
 /**\fn BCR.build_control_layout
  *
  * Non-method function to handle building the controller layout
