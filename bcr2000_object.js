@@ -552,12 +552,13 @@ BCR.build_control_layout = function()
 	var value = midi.data2;
 
 	var index = control.track_index;
-	var device = this.banks.cursortrack.createCursorDevice("Primary");
+
+	var device = this.get_nested_macro_device(control.device);
+
 	var macro = device.getMacro(index);
 
 	if(this.options.enable_preset_switching)
 	{
-
 	    switch(control.device)
 	    {
 	    case BCR.MACRO_BANK1:
