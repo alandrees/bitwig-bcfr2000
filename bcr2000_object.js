@@ -546,7 +546,7 @@ BCR.build_control_layout = function()
 	    }
 	}
 
-	macro.getAmount().set(value, BC.MIDI_MAX);
+	macro.getAmount().set(value, BC.MIDI_MAX + 1);
     }
 
     //group 1
